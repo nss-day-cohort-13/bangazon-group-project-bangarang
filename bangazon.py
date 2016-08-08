@@ -48,16 +48,19 @@ class Bangazon:
         account_number(int) -- What the new payment options's account number is
         """
         option = PaymentOption(name, account_number)
-        self.payment_options[option.payment_option_id] = option
-        self.current_customer.payment_option_ids.append(option.payment_option_id)
+        self.payment_options.update({option.payment_option_id: option})
 
         # saves the new payment option
         self.serialize(payment_options.txt, self.payment_options)
 
         # update the current customer's payment ids and
         # overwrites their info in the list of customers, then saves the updated list
-        self.custormers[self.current_customer.customer_id] = self.current_customer
+        self.current_customer.payment_option_ids.append(option.payment_option_id)
+        self.custormers.update({self.current_customer.customer_id: self.current_customer})
         self.serialize(customers.txt, self.custormers)
+
+    def create_new_order(self):
+        pass
 
     def set_current_customer(self, customer):
         '''Sets new user as current user'''
