@@ -7,7 +7,12 @@ class TestCustomer(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        self.customer = Customer('Mike Mead', 'yourmomshouse', 'nashville', 'TN', 37075, '615-200-1919')
+        self.customer = Customer('Mike Mead',
+                                 'yourmomshouse',
+                                 'nashville',
+                                 'TN',
+                                 37075,
+                                 '615-200-1919')
 
     def test_create_customer(self):
         self.assertEqual(self.customer.name, 'Mike Mead')
@@ -17,8 +22,6 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(self.customer.zip_code, 37075)
         self.assertEqual(self.customer.phone, '615-200-1919')
         self.assertIsNotNone(self.customer.customer_id)
-
-
 
 
 if __name__ == '__main__':
