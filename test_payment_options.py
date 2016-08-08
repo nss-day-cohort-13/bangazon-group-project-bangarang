@@ -12,6 +12,7 @@ class TestPayment(unittest.TestCase):
         self.assertEqual(self.payment.name, "Visa")
         self.assertEqual(self.payment.account_number, 123456789)
         self.assertIsNotNone(self.payment.payment_id)
+        self.assertIsInstance(self.payment.payment_id, int)
 
 
 if __name__ == '__main__':
