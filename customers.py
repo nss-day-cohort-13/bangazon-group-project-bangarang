@@ -1,5 +1,6 @@
 import uuid
 
+
 class Customer:
     ''' Create a new customer'''
     def __init__(self, name, address, city, state, zip_code, phone):
