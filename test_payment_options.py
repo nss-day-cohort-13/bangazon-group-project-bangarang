@@ -11,8 +11,8 @@ class TestPayment(unittest.TestCase):
     def test_create_payment(self):
         self.assertEqual(self.payment.name, "Visa")
         self.assertEqual(self.payment.account_number, 123456789)
-        self.assertIsNotNone(self.payment.payment_id)
-        self.assertIsInstance(self.payment.payment_id, int)
+        self.assertIsNotNone(self.payment.payment_option_id)
+        self.assertIsInstance(self.payment.payment_option_id, int)
 
 
 if __name__ == '__main__':

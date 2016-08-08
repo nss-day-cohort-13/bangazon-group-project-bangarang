@@ -14,4 +14,4 @@ class PaymentOption():
         """
         self.name = name
         self.account_number = account_number
-        self.payment_id = uuid.uuid4().int
+        self.payment_option_id = uuid.uuid4().int
