@@ -1,6 +1,7 @@
 import bangazon
 import customer_class
 import payment_options_class
+from line_item_report import *
 
 current_customer = None
 
@@ -64,7 +65,7 @@ def runner():
     elif user_input == '5':
         run_complete_order()
     elif user_input == '6':
-        run_generate_popularity_report()
+        generate_order_line_items_report()
     elif user_input == '7':
         pass
 

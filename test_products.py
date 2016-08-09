@@ -16,7 +16,7 @@ class TestProduct(unittest.TestCase):
 
     def test_product_id_is_not_none(self):
         """ asserts that self.product.id is not None"""
-        self.assertIsNotNone(self.product.product_id)
+        self.assertIsNotNone(self.product.obj_id)
 
 if __name__ == '__main__':
     unittest.main()
