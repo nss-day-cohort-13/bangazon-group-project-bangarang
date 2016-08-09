@@ -10,5 +10,5 @@ class Customer:
         self.state = state
         self.zip_code = zip_code
         self.phone = phone
-        self.customer_id = uuid.uuid4().int
+        self.obj_id = uuid.uuid4().int
         self.payment_option_ids = []
