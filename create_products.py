@@ -8,7 +8,7 @@ def create_product():
     product_price = int(input('what is the product price? > '))
     format_product_price = locale.currency(product_price, grouping=True)
     newProduct = Product(product_name, format_product_price)
-    all_products[newProduct.product_id] = newProduct
+    all_products[newProduct.obj_id] = newProduct
     serialize('products.txt', all_products)
     product_menu()
 

@@ -4,4 +4,4 @@ class Product:
         """ sets inital values for product name, price and prdouct_id"""
         self.name = name
         self.price = price
-        self.product_id = uuid.uuid4().int
+        self.obj_id = uuid.uuid4().int

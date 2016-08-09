@@ -2,6 +2,7 @@ import bangazon
 import customer_class
 import order_class
 import payment_options_class
+import order_line_item_class
 
 
 current_customer = None
@@ -78,12 +79,12 @@ def run_select_unpaid_order(new_order_option=False):
 
     for key, order in enumerate(current_customer_orders):
         # gets the first 5 order_line items' product ids that correspond to the current order
-        order_items = [item.product_id for key, item in enumerate(stored_order_line_items)
+        order_items = [item.product_id for key, item in enumerate(stored_order_line_items.values())
                        if item.order_id == order.obj_id and
                        key <= 4]
 
         # gets the names of each product for the ids stored in order_items
-        product_names_to_display = [stored_products[order_item] for order_item in order_items]
+        product_names_to_display = [stored_products[order_item].name for order_item in order_items]
 
         # send message to menu if there are no products in an order
         if len(product_names_to_display) == 0:
@@ -125,9 +126,34 @@ def run_select_unpaid_order(new_order_option=False):
 
 
 def run_add_products():
-    pass
-    # global stored_products
-    # print("Select products to add to your order:\n")
+    global stored_products
+    global current_order
+
+    stored_products_list = list()
+
+    print("Select products to add to your order:\n")
+    for key, product in enumerate(stored_products.values()):
+        stored_products_list.append(product)
+        print('\n {0}. {1} {2}'.format(key + 1, product.name, product.price))
+    print('\n 0. Done Adding Products')
+
+    try:
+        user_input = int(input("\n > "))
+
+    except ValueError:
+        print("\nError: Input must be an integer. Please try again.")
+        run_add_products()
+
+    if user_input == 0:
+        runner()
+
+    else:
+        selected_product = stored_products_list[user_input - 1]
+        new_order_line_item = order_line_item_class.OrderLineItem(current_order.obj_id, selected_product.obj_id)
+        bangazon.update_serialized_data('order_line_items.txt', new_order_line_item)
+        run_add_products()
+
+
 
 def run_complete_order():
     pass
@@ -150,7 +176,7 @@ def runner():
     elif user_input == '4':
         run_select_unpaid_order(True)
     elif user_input == '5':
-        run_select_unpaid_order
+        run_select_unpaid_order()
     elif user_input == '6':
         run_generate_popularity_report()
     elif user_input == '7':
