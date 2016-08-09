@@ -23,6 +23,19 @@ def run_create_user():
     new_customer = customer_class.Customer(name, address, city, state, zip_code, phone)
     bangazon.update_serialized_data('customers.txt', new_customer)
 
+def run_select_user():
+    global current_customer
+    stored_customers = bangazon.deserialize('customers.txt')
+    output = str()
+    stored_customers_list = list()
+    print('Select User:')
+    for key, customer_id in enumerate(stored_customers):
+        customer = stored_customers[customer_id]
+        stored_customers_list.append(customer.obj_id)
+        print('\n {0}. {1}'.format(key + 1, customer.name))
+    user_input = int(input('\n >'))
+    current_customer = stored_customers[stored_customers_list[user_input - 1]]
+
 def runner():
     print('\n Input option number:')
     print(generate_main_menu())
