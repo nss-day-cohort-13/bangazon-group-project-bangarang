@@ -1,5 +1,5 @@
 import unittest
-from customers import *
+from customer_class import *
 
 
 class TestCustomer(unittest.TestCase):
@@ -21,7 +21,7 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(self.customer.state, 'TN')
         self.assertEqual(self.customer.zip_code, 37075)
         self.assertEqual(self.customer.phone, '615-200-1919')
-        self.assertIsNotNone(self.customer.customer_id)
+        self.assertIsNotNone(self.customer.obj_id)
 
 
 if __name__ == '__main__':
