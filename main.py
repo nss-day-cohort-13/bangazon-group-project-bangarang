@@ -5,7 +5,7 @@ import payment_options_class
 current_customer = None
 
 def generate_main_menu():
-    output = ('\n 1. Create A Customer Account' +
+    output = ('\n\033[94m\033[1m 1. Create A Customer Account' +
     '\n 2. Choose Active Customer' +
     '\n 3. Create A Payment Option' +
     '\n 4. Add Product To Shopping Cart' +
