@@ -1,17 +1,31 @@
-from bangazon import *
+import bangazon
+import customer_class
+
+current_customer = None
+
 def generate_main_menu():
-    output = '\n 1. Create A Customer Account' +
+    output = ('\n 1. Create A Customer Account' +
+    '\n 2. Choose Active Customer' +
     '\n 3. Create A Payment Option' +
     '\n 4. Add Product To Shopping Cart' +
     '\n 5. Complete An Order' +
     '\n 6. See Product Popularity' +
-    '\n 7. Leave Bangazon'
+    '\n 7. Leave Bangazon')
     return output
 
+def run_create_user():
+    name = input('\n Name: ')
+    address = input('\n Address: ')
+    city = input('\n City: ')
+    state = input('\n State: ')
+    zip_code = input('\n Zip Code: ')
+    phone = input('\n Phone: ')
+    new_customer = customer_class.Customer(name, address, city, state, zip_code, phone)
+    bangazon.update_serialized_data('customers.txt', new_customer)
 
 def runner():
-    print(generate_main_menu())
     print('\n Input option number:')
+    print(generate_main_menu())
     user_input = input('\n > ')
     if user_input == '1':
         run_create_user()
