@@ -126,12 +126,21 @@ def run_select_unpaid_order(new_order_option=False):
 
 
 def run_add_products():
+    """ Displays all products and prices, and
+    lets a user select a product to add to their current shopping cart.
+
+    Method arguments:
+    -----------------
+    n/a
+    """
     global stored_products
     global current_order
 
     stored_products_list = list()
 
     print("Select products to add to your order:\n")
+    # displays all available products and prices,
+    # and creates an ordered list to compare with the user's input
     for key, product in enumerate(stored_products.values()):
         stored_products_list.append(product)
         print('\n {0}. {1} {2}'.format(key + 1, product.name, product.price))
@@ -148,9 +157,16 @@ def run_add_products():
         runner()
 
     else:
-        selected_product = stored_products_list[user_input - 1]
-        new_order_line_item = order_line_item_class.OrderLineItem(current_order.obj_id, selected_product.obj_id)
-        bangazon.update_serialized_data('order_line_items.txt', new_order_line_item)
+        try:
+            # gets the product selcted by the user and creates an
+            # order line item with it's id and the current order id
+            selected_product = stored_products_list[user_input - 1]
+            new_order_line_item = order_line_item_class.OrderLineItem(current_order.obj_id, selected_product.obj_id)
+            bangazon.update_serialized_data('order_line_items.txt', new_order_line_item)
+
+        except IndexError:
+            print("\nError: Input must be an integer in the range of options.")
+
         run_add_products()
 
 
