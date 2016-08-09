@@ -53,6 +53,17 @@ def run_create_payment():
     bangazon.update_serialized_data('payments.txt', new_payment_option)
 
 def run_select_unpaid_order(new_order_option=False):
+    """ Displays all unpaid orders for the user that is currently logged in,
+    and allows them to select which one they want. Will call the method to add products to
+    an order if the new_order_option is True, or will call the method to finalize an order.
+
+    Method arguments:
+    -----------------
+    new_order_option(boolean) -- When True, displays the option to create a new order, then calls the
+                                 run_add_products method after user selection.
+                                 If false, calls the run_complete_order method.
+                                 Defaults to False.
+    """
     global current_customer
     global current_order
     global stored_products
