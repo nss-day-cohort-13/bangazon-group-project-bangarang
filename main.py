@@ -78,7 +78,7 @@ def run_select_unpaid_order(new_order_option=False):
                                order.paid_in_full is False]
 
     for key, order in enumerate(current_customer_orders):
-        # gets the first 5 order_line items' product ids that correspond to the current order
+        # gets the first 4 order_line items' product ids that correspond to the current order
         order_items = [item.product_id for key, item in enumerate(stored_order_line_items.values())
                        if item.order_id == order.obj_id and
                        key <= 4]
@@ -90,7 +90,7 @@ def run_select_unpaid_order(new_order_option=False):
         if len(product_names_to_display) == 0:
             product_names_to_display = ["No products added yet"]
 
-        print('\n {0}. {1}'.format(key + 1, ",".join(product_names_to_display)))
+        print('\n {0}. {1}'.format(key + 1, ", ".join(product_names_to_display)))
 
     # display New Order option if True, otherwise don't print it
     if new_order_option:
