@@ -1,5 +1,6 @@
 import bangazon
 import customer_class
+import payment_options_class
 
 current_customer = None
 
@@ -35,6 +36,18 @@ def run_select_user():
         print('\n {0}. {1}'.format(key + 1, customer.name))
     user_input = int(input('\n >'))
     current_customer = stored_customers[stored_customers_list[user_input - 1]]
+    print('\n Welcome {0}'.format(current_customer.name))
+    runner()
+
+def run_create_payment():
+    global current_customer
+    stored_payments = bangazon.deserialize('payments.txt')
+    stored_payments_list = list()
+    print(' Enter payment information below:')
+    name = input(' Name: ')
+    account_number = input(' Card Number: ')
+    new_payment_option = payment_options_class.PaymentOption(name, account_number, current_customer.obj_id)
+    bangazon.update_serialized_data('payments.txt', new_payment_option)
 
 def runner():
     print('\n Input option number:')
