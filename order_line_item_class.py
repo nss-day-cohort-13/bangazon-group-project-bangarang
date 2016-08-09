@@ -14,4 +14,4 @@ class OrderLineItem():
         """
         self.order_id = order_id
         self.product_id = product_id
-        self.order_line_item_id = uuid.uuid4().int
+        self.obj_id = uuid.uuid4().int
