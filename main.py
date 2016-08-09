@@ -52,7 +52,18 @@ def run_create_payment():
     new_payment_option = payment_options_class.PaymentOption(name, account_number, current_customer.obj_id)
     bangazon.update_serialized_data('payments.txt', new_payment_option)
 
-def run_select_order_to_add_to():
+def run_select_unpaid_order(new_order_option=False):
+    """ Displays all unpaid orders for the user that is currently logged in,
+    and allows them to select which one they want. Will call the method to add products to
+    an order if the new_order_option is True, or will call the method to finalize an order.
+
+    Method arguments:
+    -----------------
+    new_order_option(boolean) -- When True, displays the option to create a new order, then calls the
+                                 run_add_products method after user selection.
+                                 If false, calls the run_complete_order method.
+                                 Defaults to False.
+    """
     global current_customer
     global current_order
     global stored_products
@@ -74,10 +85,17 @@ def run_select_order_to_add_to():
         # gets the names of each product for the ids stored in order_items
         product_names_to_display = [stored_products[order_item] for order_item in order_items]
 
+        # send message to menu if there are no products in an order
+        if len(product_names_to_display) == 0:
+            product_names_to_display = ["No products added yet"]
+
         print('\n {0}. {1}'.format(key + 1, ",".join(product_names_to_display)))
 
-    print('\n 0. Start New Order')
+    # display New Order option if True, otherwise don't print it
+    if new_order_option:
+        print('\n 0. Start New Order')
 
+    # get user input in integer form
     try:
         user_input = int(input("\n > "))
 
@@ -85,25 +103,34 @@ def run_select_order_to_add_to():
         print("\nError: Input must be an integer. Please try again.")
         run_add_products()
 
-    if user_input == 0:
-        # creates a new order and sets it as the global current_order and saves the data
-        current_order = order_class.Order(current_customer.obj_id)
-        bangazon.update_serialized_data('orders.txt', current_order)
+    if new_order_option:
+        if user_input == 0:
+            # creates a new order and sets it as the global current_order and saves the data
+            current_order = order_class.Order(current_customer.obj_id)
+            bangazon.update_serialized_data('orders.txt', current_order)
+
+    try:
+        current_order = current_customer_orders[user_input - 1]
+
+    except IndexError:
+        print("\nError: Input must be the number value next to the option you wish to select.")
+
+    # if the new order option is true, go to menu to add products to the order,
+    # otherwise go to the menu to complete an order
+    if new_order_option:
+        run_add_products()
 
     else:
-        try:
-            current_order = current_customer_orders[user_input - 1]
-
-        except IndexError:
-            print("\nError: Input must be the number value next to the desired order, "
-                  "or '0' to create a new order.")
-    run_add_products()
+        run_complete_order()
 
 
 def run_add_products():
     pass
     # global stored_products
     # print("Select products to add to your order:\n")
+
+def run_complete_order():
+    pass
 
 def initialize():
     global stored_products
@@ -121,9 +148,9 @@ def runner():
     elif user_input == '3':
         run_create_payment()
     elif user_input == '4':
-        run_select_order_to_add_to()
+        run_select_unpaid_order(True)
     elif user_input == '5':
-        run_complete_order()
+        run_select_unpaid_order
     elif user_input == '6':
         run_generate_popularity_report()
     elif user_input == '7':
