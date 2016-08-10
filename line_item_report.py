@@ -67,12 +67,13 @@ def generate_product_popularity_report():
     ## Iterate through report dictionary and format values for output
     for report_product_name in report:
 
+
         ## Declare variable for dictionaries associated...
         ## with report dictionary keys
         report_product_dict = report[report_product_name]
 
         ## Product name
-        product_row += ((report_product_name[:14] + '... ')
+        product_row = ((report_product_name[:14] + '... ')
         if len(report_product_name) > 17
         else report_product_name.ljust(18))
 
