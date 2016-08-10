@@ -72,6 +72,8 @@ def run_create_payment():
     name = input(' Name: ')
     account_number = input(' Card Number: ')
     new_payment_option = payment_options_class.PaymentOption(name, account_number, current_customer.obj_id)
+    current_customer.payment_option_ids.append(new_payment_option.obj_id)
+    bangazon.update_serialized_data('customers.txt', current_customer)
     bangazon.update_serialized_data('payments.txt', new_payment_option)
     runner()
 
@@ -194,9 +196,9 @@ def run_add_products():
 
 def run_complete_order():
     global stored_products
+    locale.setlocale(locale.LC_ALL, 'en_US')
     stored_order_line_items = bangazon.deserialize('order_line_items.txt')
     order_to_be_paid = current_order.obj_id
-    # print('current_order', current_order.obj_id)
     products_in_order = [value for key,value in stored_order_line_items.items()
         if order_to_be_paid == value.order_id]
     product_ids = [item.product_id for item in products_in_order]
@@ -205,9 +207,26 @@ def run_complete_order():
     total = 0
     for item in format_int_prices:
         total = total + item
-    print('total', total)
-    # print('overall_price', [eval() for item in format_int_prices])
-
+    formatted_total = locale.currency(total, grouping=True)
+    print('Your order total is ' + formatted_total + '. Ready to purchase')
+    choice = input('Y/N > ')
+    if choice == 'Y' or 'y':
+        all_payment_options = bangazon.deserialize('payments.txt')
+        print('all payments', all_payment_options)
+        customer_payment_options = current_customer.payment_option_ids
+        payment_options = [all_payment_options[item].name for item in customer_payment_options]
+        for key, payment_name in enumerate(payment_options):
+            print('\n {0}. {1}'.format(key + 1, payment_name))
+        print('0. Cancel')
+        selection = input('What is your choice? > ')
+        try:
+            print('You chose {0}'.format(payment_options[int(selection)]))
+            print('\n Your order is complete!')
+        except:
+            print('Error: Invalid input.')
+            run_complete_order()
+    if choice == 'N' or 'n':
+        runner()
 
 
 
