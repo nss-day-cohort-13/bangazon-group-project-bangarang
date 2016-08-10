@@ -1,34 +1,5 @@
 import pickle
-# import customers as customer_class
-# from order_line_items import *
-# from orders import *
-# from payment_options import *
-# from product import *
 
-# current_customer = None
-
-# def create_customer(name, address, city, state, zip_code, phone):
-#     global customers
-#     """ Creates a new customer,
-#     sets the current_user to be the new customer,
-#     adds the new customer data to the customers dictionary
-#     using the new customer's UUID as a key,
-#     and serializes the customers dictionary
-#
-#     Method arguments:
-#     -----------------
-#     name(str) -- What the new customer's name attribute will be
-#     address(str) -- What the new customer's address attribute will be
-#     city(str) -- What the new customer's city attribute will be
-#     state(str) -- What the new customer's state attribute will be
-#     zip_code(int) -- What the new customer's zip_code attribute will be
-#     phone(str) -- What the new customer's phone attribute will be
-#     """
-#     customer = customer_class.Customer(name, address, city, state, zip_code, phone)
-#     customers[customer.customer_id] = customer
-#     set_current_customer(customer)
-#     serialize('customers.txt', customers)
-#
 # def create_payment_option(name, account_number):
 #     global options
 #     global customers
