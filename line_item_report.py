@@ -1,4 +1,5 @@
 import bangazon
+import locale
 
 def generate_order_line_items_dictionary():
     '''
@@ -27,6 +28,7 @@ def generate_order_line_items_dictionary():
 
         ## Check if product name is already a key in the report dictionary
         if order_object.paid_in_full == True:
+
             if dict.__contains__(report, product_object.name):
 
                 ## Declare variables for pre-existing...
@@ -69,6 +71,8 @@ def generate_product_popularity_report():
     Generate string output for report dictionary
     '''
 
+    locale.setlocale(locale.LC_ALL, 'en_US')
+
     ## Generate report dictionary from order line items
     report = generate_order_line_items_dictionary()
 
@@ -105,9 +109,9 @@ def generate_product_popularity_report():
         else str(report_product_dict['customer_count']).ljust(11))
 
         ## Revenue
-        product_row += ((report_product_dict['revenue'][:11] + '... ')
+        product_row += ((locale.currency(report_product_dict['revenue'], grouping = True)[:11] + '... ')
         if len(str(report_product_dict['revenue'])) > 14
-        else str(report_product_dict['revenue']).ljust(15))
+        else locale.currency(report_product_dict['revenue'], grouping = True).ljust(15))
 
         ## Appends new product row to output
         output += (' ' + product_row + '\n')
@@ -128,9 +132,9 @@ def generate_product_popularity_report():
     else str(total_customers).ljust(11))
 
     ## Revenue
-    totals_row += ((total_revenue[:11] + '... ')
+    totals_row += ((locale.currency(total_revenue, grouping = True)[:11] + '... ')
     if len(str(total_revenue)) > 14
-    else str(total_revenue).ljust(15))
+    else locale.currency(total_revenue, grouping = True).ljust(15))
 
     ## Appends new product row to output
     output += (' ' + totals_row + '\n')
