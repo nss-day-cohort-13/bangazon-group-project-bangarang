@@ -1,7 +1,9 @@
 import bangazon
 
 def generate_order_line_items_dictionary():
-    '''Generates report from line items.'''
+    '''
+    Generate report dictionary from serialized order line items
+    '''
 
     ## Declare main report dictionary
     report = dict()
@@ -51,25 +53,48 @@ def generate_order_line_items_dictionary():
     return report
 
 def generate_product_popularity_report():
-    output = str()
+    '''
+    Generate string output for report dictionary
+    '''
+
+    ## Generate report dictionary from order line items
     report = generate_order_line_items_dictionary()
-    output += ('\n Product           Orders     Customers  Revenue\n' +
+
+    ## Output header
+    output = ('\n Product           Orders     Customers  Revenue\n' +
     ' *******************************************************\n')
+
+    ## Iterate through report dictionary and format values for output
     for report_product_name in report:
-        product_row = str()
+
+        ## Declare variable for dictionaries associated...
+        ## with report dictionary keys
         report_product_dict = report[report_product_name]
+
+        ## Product name
         product_row += ((report_product_name[:14] + '... ')
         if len(report_product_name) > 17
         else report_product_name.ljust(18))
+
+        ## Order count
         product_row += ((report_product_dict['order_count'][:7] + '... ')
         if len(str(report_product_dict['order_count'])) > 10
         else str(report_product_dict['order_count']).ljust(11))
+
+        ## Customer count
         product_row += ((report_product_dict['customer_count'][:7] + '... ')
         if len(str(report_product_dict['customer_count'])) > 10
         else str(report_product_dict['customer_count']).ljust(11))
+
+        ## Revenue
         product_row += ((report_product_dict['revenue'][:11] + '... ')
         if len(str(report_product_dict['revenue'])) > 14
         else str(report_product_dict['revenue']).ljust(15))
+
+        ## Appends new product row to output
         output += (' ' + product_row + '\n')
+
+    ## Output footer
     output += ' *******************************************************\n\n'
+
     return output
