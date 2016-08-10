@@ -118,7 +118,9 @@ def run_select_unpaid_order(new_order_option=False):
 
     # display New Order option if True, otherwise don't print it
     if new_order_option:
-        print('\n 0. Start New Order')
+        print('\n 100. Start New Order')
+
+    print('\n 0. Cancel')
 
     # get user input in integer form
     try:
@@ -128,7 +130,10 @@ def run_select_unpaid_order(new_order_option=False):
         print("\nError: Input must be an integer. Please try again.")
         run_add_products()
 
-    if new_order_option and user_input == 0:
+    if user_input == 0:
+        runner()
+
+    if new_order_option and user_input == 100:
         # creates a new order and sets it as the global current_order and saves the data
         current_order = order_class.Order(current_customer.obj_id)
         bangazon.update_serialized_data('orders.txt', current_order)
@@ -253,17 +258,24 @@ def runner():
     user_input = input('\n > ')
     if user_input == '1':
         run_create_user()
+        runner()
     elif user_input == '2':
         run_select_user()
+        runner()
     elif user_input == '3':
         run_create_payment()
+        runner()
     elif user_input == '4':
         run_select_unpaid_order(True)
+        runner()
     elif user_input == '5':
         run_select_unpaid_order()
+        runner()
     elif user_input == '6':
         print(line_item_report.generate_product_popularity_report())
+        runner()
     elif user_input == '7':
+        exit()
         pass
 
 if __name__ == '__main__':

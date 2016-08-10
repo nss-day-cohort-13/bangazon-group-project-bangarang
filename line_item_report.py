@@ -52,6 +52,17 @@ def generate_order_line_items_dictionary():
 
     return report
 
+def generate_order_totals_dictionary(report):
+    total_orders = 0
+    total_customers = 0
+    total_revenue = 0
+    for product_name in report:
+        report_product_dictionary = report[product_name]
+        total_orders += report_product_dictionary['order_count']
+        total_customers += report_product_dictionary['customer_count']
+        total_revenue += report_product_dictionary['revenue']
+    return { 'total_orders': total_orders, 'total_customers': total_customers, 'total_revenue': total_revenue}
+
 def generate_product_popularity_report():
     '''
     Generate string output for report dictionary
@@ -60,13 +71,18 @@ def generate_product_popularity_report():
     ## Generate report dictionary from order line items
     report = generate_order_line_items_dictionary()
 
+    ## Generate totals from report dictionary
+    report_totals_dict = generate_order_totals_dictionary(report)
+    total_orders = report_totals_dict['total_orders']
+    total_customers = report_totals_dict['total_customers']
+    total_revenue = report_totals_dict['total_revenue']
+
     ## Output header
     output = ('\n Product           Orders     Customers  Revenue\n' +
     ' *******************************************************\n')
 
     ## Iterate through report dictionary and format values for output
     for report_product_name in report:
-
 
         ## Declare variable for dictionaries associated...
         ## with report dictionary keys
@@ -95,7 +111,29 @@ def generate_product_popularity_report():
         ## Appends new product row to output
         output += (' ' + product_row + '\n')
 
+    output += ' *******************************************************\n'
+
+    ## Product name
+    totals_row = ('Totals:'.ljust(18))
+
+    ## Order count
+    totals_row += ((total_orders[:7] + '... ')
+    if len(str(total_orders)) > 10
+    else str(total_orders).ljust(11))
+
+    ## Customer count
+    totals_row += ((total_customers[:7] + '... ')
+    if len(str(total_customers)) > 10
+    else str(total_customers).ljust(11))
+
+    ## Revenue
+    totals_row += ((total_revenue[:11] + '... ')
+    if len(str(total_revenue)) > 14
+    else str(total_revenue).ljust(15))
+
+    ## Appends new product row to output
+    output += (' ' + totals_row + '\n')
+
     ## Output footer
-    output += ' *******************************************************\n\n'
 
     return output
