@@ -144,10 +144,10 @@ def run_select_unpaid_order(new_order_option=False):
 
         except IndexError:
             print("\nError: Input must be the number value next to the option you wish to select.")
+            run_select_unpaid_order()
 
-        # if the new order option is true, go to menu to add products to the order,
-        # otherwise go to the menu to complete an order
-
+    # if the new order option is true, go to menu to add products to the order,
+    # otherwise go to the menu to complete an order
     if new_order_option:
         run_add_products()
 
@@ -221,7 +221,12 @@ def run_complete_order():
     choice = input('Y/N > ')
     if choice == 'Y' or choice == 'y':
         all_payment_options = bangazon.deserialize('payments.txt')
-        print('all payments', all_payment_options)
+
+        # if customer has no payment options, send them to the create payment option menu
+        if len(current_customer.payment_option_ids) == 0:
+            print("\nYou must add a payment option before checking out.")
+            run_create_payment()
+
         customer_payment_options = current_customer.payment_option_ids
         payment_options = [all_payment_options[item] for item in customer_payment_options]
         for key, payment in enumerate(payment_options):
@@ -240,7 +245,7 @@ def run_complete_order():
                 print('Error: Invalid input.')
                 run_complete_order()
         if selection < 1:
-            run_complete_order()
+            runner()
     if choice == 'N' or choice == 'n':
         runner()
 
@@ -276,7 +281,7 @@ def runner():
         runner()
     elif user_input == '7':
         exit()
-        pass
+
 
 if __name__ == '__main__':
     runner()

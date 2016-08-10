@@ -26,9 +26,9 @@ def generate_order_line_items_dictionary():
         product_object = stored_products[order_line_object.product_id]
         order_object = stored_orders[order_line_object.order_id]
 
-        if order_object.paid_in_full == False:
+        ## Check if product name is already a key in the report dictionary
+        if order_object.paid_in_full == True:
 
-            ## Check if product name is already a key in the report dictionary
             if dict.__contains__(report, product_object.name):
 
                 ## Declare variables for pre-existing...
