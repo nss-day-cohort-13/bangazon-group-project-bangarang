@@ -26,29 +26,30 @@ def generate_order_line_items_dictionary():
         order_object = stored_orders[order_line_object.order_id]
 
         ## Check if product name is already a key in the report dictionary
-        if dict.__contains__(report, product_object.name):
+        if order_object.paid_in_full == True:
+            if dict.__contains__(report, product_object.name):
 
-            ## Declare variables for pre-existing...
-            ## order count, customer id set and revnue
-            order_count = report[product_object.name]['order_count']
-            revenue = report[product_object.name]['revenue']
-            customer_id_set = report[product_object.name]['customer_id_set']
+                ## Declare variables for pre-existing...
+                ## order count, customer id set and revnue
+                order_count = report[product_object.name]['order_count']
+                revenue = report[product_object.name]['revenue']
+                customer_id_set = report[product_object.name]['customer_id_set']
 
-        ## Initialize order count and customer id set...
-        # for new report dictionary keys
-        else:
-            order_count = 0
-            revenue = 0
-            customer_id_set = set()
+            ## Initialize order count and customer id set...
+            # for new report dictionary keys
+            else:
+                order_count = 0
+                revenue = 0
+                customer_id_set = set()
 
-        ## Increases product order count and stores unique customer ids in..
-        ## customer id set and updates report dictionary
-        order_count += 1
-        revenue += float(product_object.price.replace(',','')[1:])
-        customer_id_set.add(order_object.customer_id)
-        report.update({product_object.name: {'order_count': order_count,
-        'revenue': revenue, 'customer_id_set': customer_id_set,
-        'customer_count': len(customer_id_set)}})
+            ## Increases product order count and stores unique customer ids in..
+            ## customer id set and updates report dictionary
+            order_count += 1
+            revenue += float(product_object.price.replace(',','')[1:])
+            customer_id_set.add(order_object.customer_id)
+            report.update({product_object.name: {'order_count': order_count,
+            'revenue': revenue, 'customer_id_set': customer_id_set,
+            'customer_count': len(customer_id_set)}})
 
     return report
 

@@ -276,7 +276,7 @@ def runner():
         runner()
     elif user_input == '7':
         exit()
-        pass
+        
 
 if __name__ == '__main__':
     runner()
