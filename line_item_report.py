@@ -132,9 +132,9 @@ def generate_product_popularity_report():
     else str(total_customers).ljust(11))
 
     ## Revenue
-    totals_row += ((total_revenue[:11] + '... ')
+    totals_row += ((locale.currency(total_revenue, grouping = True)[:11] + '... ')
     if len(str(total_revenue)) > 14
-    else str(total_revenue).ljust(15))
+    else locale.currency(total_revenue, grouping = True).ljust(15))
 
     ## Appends new product row to output
     output += (' ' + totals_row + '\n')
