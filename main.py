@@ -199,17 +199,24 @@ def runner():
     user_input = input('\n > ')
     if user_input == '1':
         run_create_user()
+        runner()
     elif user_input == '2':
         run_select_user()
+        runner()
     elif user_input == '3':
         run_create_payment()
+        runner()
     elif user_input == '4':
         run_select_unpaid_order(True)
+        runner()
     elif user_input == '5':
         run_select_unpaid_order()
+        runner()
     elif user_input == '6':
         print(line_item_report.generate_product_popularity_report())
+        runner()
     elif user_input == '7':
+        exit()
         pass
 
 if __name__ == '__main__':
