@@ -8,6 +8,7 @@ import order_line_item_class
 import locale
 
 current_customer = None
+current_order = None
 
 def generate_main_menu():
     '''
@@ -196,6 +197,9 @@ def run_add_products():
 
 def run_complete_order():
     global stored_products
+    global current_customer
+    global current_order
+
     locale.setlocale(locale.LC_ALL, 'en_US')
     stored_order_line_items = bangazon.deserialize('order_line_items.txt')
     order_to_be_paid = current_order.obj_id
@@ -210,22 +214,29 @@ def run_complete_order():
     formatted_total = locale.currency(total, grouping=True)
     print('Your order total is ' + formatted_total + '. Ready to purchase')
     choice = input('Y/N > ')
-    if choice == 'Y' or 'y':
+    if choice == 'Y' or choice == 'y':
         all_payment_options = bangazon.deserialize('payments.txt')
         print('all payments', all_payment_options)
         customer_payment_options = current_customer.payment_option_ids
-        payment_options = [all_payment_options[item].name for item in customer_payment_options]
-        for key, payment_name in enumerate(payment_options):
-            print('\n {0}. {1}'.format(key + 1, payment_name))
+        payment_options = [all_payment_options[item] for item in customer_payment_options]
+        for key, payment in enumerate(payment_options):
+            print('\n{0}. {1}'.format(key + 1, payment.name))
         print('0. Cancel')
-        selection = input('What is your choice? > ')
-        try:
-            print('You chose {0}'.format(payment_options[int(selection)]))
-            print('\n Your order is complete!')
-        except:
-            print('Error: Invalid input.')
+        selection = int(input('What is your choice? > '))
+        if selection >= 1:
+            try:
+                current_order.paid_in_full = True
+                current_order.payment_option_id = payment_options[selection - 1].obj_id
+                bangazon.update_serialized_data('orders.txt', current_order)
+                print('\nYou chose {0}'.format(payment_options[selection - 1].name))
+                print('\n Your order is complete!')
+                runner()
+            except:
+                print('Error: Invalid input.')
+                run_complete_order()
+        if selection < 1:
             run_complete_order()
-    if choice == 'N' or 'n':
+    if choice == 'N' or choice == 'n':
         runner()
 
 
