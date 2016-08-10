@@ -8,6 +8,9 @@ import line_item_report
 current_customer = None
 
 def generate_main_menu():
+    '''
+    Generates main menu string
+    '''
     output = ('\n\033[94m\033[1m 1. Create A Customer Account' +
     '\n 2. Choose Active Customer' +
     '\n 3. Create A Payment Option' +
@@ -18,6 +21,11 @@ def generate_main_menu():
     return output
 
 def run_create_user():
+    '''
+    Creates a new customer,
+    sets the current_user to be the new customer,
+    updates serialized customer dictionary
+    '''
     name = input('\n Name: ')
     address = input('\n Address: ')
     city = input('\n City: ')
@@ -28,9 +36,13 @@ def run_create_user():
     bangazon.update_serialized_data('customers.txt', new_customer)
 
 def run_select_user():
+    '''
+    Displays list of customer names,
+    gets user input to select customer
+    and sets global current_customer
+    '''
     global current_customer
     stored_customers = bangazon.deserialize('customers.txt')
-    output = str()
     stored_customers_list = list()
     print('Select User:')
     for key, customer_id in enumerate(stored_customers):
@@ -43,6 +55,11 @@ def run_select_user():
     runner()
 
 def run_create_payment():
+    '''
+    Deserialize stored payment dictionary,
+    create new payment option from user input,
+    and update serialized payment dictionary
+    '''
     global current_customer
     stored_payments = bangazon.deserialize('payments.txt')
     stored_payments_list = list()
