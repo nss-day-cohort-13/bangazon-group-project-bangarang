@@ -195,7 +195,7 @@ def runner():
     elif user_input == '5':
         run_select_unpaid_order()
     elif user_input == '6':
-        generate_order_line_items_report()
+        print_product_popularity_report()
     elif user_input == '7':
         pass
 
