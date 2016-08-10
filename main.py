@@ -100,14 +100,12 @@ def run_select_unpaid_order(new_order_option=False):
                                order.paid_in_full is False]
 
     for key, order in enumerate(current_customer_orders):
-        # gets the first 4 order_line items' product ids that correspond to the current order
-        order_items = [item.product_id for key, item in enumerate(stored_order_line_items.values())
-                       if item.order_id == order.obj_id and
-                       key <= 4]
+        # gets the first 5 order_line items' product ids that correspond to the current order
+        order_items = [item.product_id for item in stored_order_line_items.values()
+                       if item.order_id == order.obj_id][0:5]
 
         # gets the names of each product for the ids stored in order_items
         product_names_to_display = [stored_products[order_item].name for order_item in order_items]
-
         # send message to menu if there are no products in an order
         if len(product_names_to_display) == 0:
             product_names_to_display = ["No products added yet"]
@@ -126,20 +124,21 @@ def run_select_unpaid_order(new_order_option=False):
         print("\nError: Input must be an integer. Please try again.")
         run_add_products()
 
-    if new_order_option:
-        if user_input == 0:
-            # creates a new order and sets it as the global current_order and saves the data
-            current_order = order_class.Order(current_customer.obj_id)
-            bangazon.update_serialized_data('orders.txt', current_order)
+    if new_order_option and user_input == 0:
+        # creates a new order and sets it as the global current_order and saves the data
+        current_order = order_class.Order(current_customer.obj_id)
+        bangazon.update_serialized_data('orders.txt', current_order)
 
-    try:
-        current_order = current_customer_orders[user_input - 1]
+    else:
+        try:
+            current_order = current_customer_orders[user_input - 1]
 
-    except IndexError:
-        print("\nError: Input must be the number value next to the option you wish to select.")
+        except IndexError:
+            print("\nError: Input must be the number value next to the option you wish to select.")
 
-    # if the new order option is true, go to menu to add products to the order,
-    # otherwise go to the menu to complete an order
+        # if the new order option is true, go to menu to add products to the order,
+        # otherwise go to the menu to complete an order
+
     if new_order_option:
         run_add_products()
 
