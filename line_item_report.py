@@ -1,4 +1,5 @@
 import bangazon
+import locale
 
 def generate_order_line_items_dictionary():
     '''
@@ -25,30 +26,32 @@ def generate_order_line_items_dictionary():
         product_object = stored_products[order_line_object.product_id]
         order_object = stored_orders[order_line_object.order_id]
 
-        ## Check if product name is already a key in the report dictionary
-        if dict.__contains__(report, product_object.name):
+        if order_object.paid_in_full == False:
 
-            ## Declare variables for pre-existing...
-            ## order count, customer id set and revnue
-            order_count = report[product_object.name]['order_count']
-            revenue = report[product_object.name]['revenue']
-            customer_id_set = report[product_object.name]['customer_id_set']
+            ## Check if product name is already a key in the report dictionary
+            if dict.__contains__(report, product_object.name):
 
-        ## Initialize order count and customer id set...
-        # for new report dictionary keys
-        else:
-            order_count = 0
-            revenue = 0
-            customer_id_set = set()
+                ## Declare variables for pre-existing...
+                ## order count, customer id set and revnue
+                order_count = report[product_object.name]['order_count']
+                revenue = report[product_object.name]['revenue']
+                customer_id_set = report[product_object.name]['customer_id_set']
 
-        ## Increases product order count and stores unique customer ids in..
-        ## customer id set and updates report dictionary
-        order_count += 1
-        revenue += float(product_object.price.replace(',','')[1:])
-        customer_id_set.add(order_object.customer_id)
-        report.update({product_object.name: {'order_count': order_count,
-        'revenue': revenue, 'customer_id_set': customer_id_set,
-        'customer_count': len(customer_id_set)}})
+            ## Initialize order count and customer id set...
+            # for new report dictionary keys
+            else:
+                order_count = 0
+                revenue = 0
+                customer_id_set = set()
+
+            ## Increases product order count and stores unique customer ids in..
+            ## customer id set and updates report dictionary
+            order_count += 1
+            revenue += float(product_object.price.replace(',','')[1:])
+            customer_id_set.add(order_object.customer_id)
+            report.update({product_object.name: {'order_count': order_count,
+            'revenue': revenue, 'customer_id_set': customer_id_set,
+            'customer_count': len(customer_id_set)}})
 
     return report
 
@@ -67,6 +70,8 @@ def generate_product_popularity_report():
     '''
     Generate string output for report dictionary
     '''
+
+    locale.setlocale(locale.LC_ALL, 'en_US')
 
     ## Generate report dictionary from order line items
     report = generate_order_line_items_dictionary()
@@ -104,9 +109,9 @@ def generate_product_popularity_report():
         else str(report_product_dict['customer_count']).ljust(11))
 
         ## Revenue
-        product_row += ((report_product_dict['revenue'][:11] + '... ')
+        product_row += ((locale.currency(report_product_dict['revenue'], grouping = True)[:11] + '... ')
         if len(str(report_product_dict['revenue'])) > 14
-        else str(report_product_dict['revenue']).ljust(15))
+        else locale.currency(report_product_dict['revenue'], grouping = True).ljust(15))
 
         ## Appends new product row to output
         output += (' ' + product_row + '\n')
