@@ -5,6 +5,7 @@ import payment_options_class
 import order_line_item_class
 import line_item_report
 import order_line_item_class
+import locale
 
 current_customer = None
 
@@ -192,9 +193,23 @@ def run_add_products():
 
 
 def run_complete_order():
+    global stored_products
     stored_order_line_items = bangazon.deserialize('order_line_items.txt')
-    for key,value in stored_order_line_items.items():
-        print('order-line-item', str(value.obj_id) + ', ' + str(value.product_id) + ', ' + str(value.order_id))
+    order_to_be_paid = current_order.obj_id
+    # print('current_order', current_order.obj_id)
+    products_in_order = [value for key,value in stored_order_line_items.items()
+        if order_to_be_paid == value.order_id]
+    product_ids = [item.product_id for item in products_in_order]
+    product_prices = [stored_products[id].price for id in product_ids]
+    format_int_prices = [float(item.replace(',','')[1:]) for item in product_prices]
+    total = 0
+    for item in format_int_prices:
+        total = total + item
+    print('total', total)
+    # print('overall_price', [eval() for item in format_int_prices])
+
+
+
 
 
 def initialize():
