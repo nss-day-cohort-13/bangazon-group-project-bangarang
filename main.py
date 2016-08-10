@@ -123,7 +123,6 @@ def run_select_unpaid_order(new_order_option=False):
     else:
         run_complete_order()
 
-
 def run_add_products():
     """ Displays all products and prices, and
     lets a user select a product to add to their current shopping cart.

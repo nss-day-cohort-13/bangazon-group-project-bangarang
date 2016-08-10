@@ -1,18 +1,19 @@
 import bangazon
 
-def generate_order_line_items_report():
+def generate_order_line_items_dictionary():
     '''Generates report from line items.'''
 
     ## Declare main report dictionary
-    ## Deserialize stored dictionaries
     report = dict()
+
+    ## Deserialize stored dictionaries
     stored_order_line_items = bangazon.deserialize('order_line_items.txt')
     stored_products = bangazon.deserialize('products.txt')
     stored_orders = bangazon.deserialize('orders.txt')
 
-
     ## Iterate over key/value pairs in the stored_order_line_items dictionary
-    ## Count instances of a given product_id and records unique customer_id's
+    ## Count instances of a given product_id, aggregate total revenue...
+    ## and record unique customer ids
     for order_line_key in stored_order_line_items:
 
         ## Declare variable for order line item order object
