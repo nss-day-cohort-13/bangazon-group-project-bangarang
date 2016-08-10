@@ -2,12 +2,10 @@ import bangazon
 import customer_class
 import order_class
 import payment_options_class
-from line_item_report import *
 import order_line_item_class
-
+import line_item_report
 
 current_customer = None
-
 
 def generate_main_menu():
     output = ('\n\033[94m\033[1m 1. Create A Customer Account' +
@@ -195,7 +193,7 @@ def runner():
     elif user_input == '5':
         run_select_unpaid_order()
     elif user_input == '6':
-        print_product_popularity_report()
+        print(line_item_report.generate_product_popularity_report())
     elif user_input == '7':
         pass
 

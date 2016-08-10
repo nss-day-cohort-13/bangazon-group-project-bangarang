@@ -49,24 +49,26 @@ def generate_order_line_items_report():
 
     return report
 
-def print_product_popularity_report():
-    report = generate_order_line_items_report()
-    print('\n Product           Orders     Customers  Revenue')
-    print(' *******************************************************')
+def generate_product_popularity_report():
+    output = str()
+    report = generate_order_line_items_dictionary()
+    output += ('\n Product           Orders     Customers  Revenue\n' +
+    ' *******************************************************\n')
     for report_product_name in report:
+        product_row = str()
         report_product_dict = report[report_product_name]
-        output = str()
-        output += ((report_product_name[:14] + '... ')
+        product_row += ((report_product_name[:14] + '... ')
         if len(report_product_name) > 17
         else report_product_name.ljust(18))
-        output += ((report_product_dict['order_count'][:7] + '... ')
+        product_row += ((report_product_dict['order_count'][:7] + '... ')
         if len(str(report_product_dict['order_count'])) > 10
         else str(report_product_dict['order_count']).ljust(11))
-        output += ((report_product_dict['customer_count'][:7] + '... ')
+        product_row += ((report_product_dict['customer_count'][:7] + '... ')
         if len(str(report_product_dict['customer_count'])) > 10
         else str(report_product_dict['customer_count']).ljust(11))
-        output += ((report_product_dict['revenue'][:11] + '... ')
+        product_row += ((report_product_dict['revenue'][:11] + '... ')
         if len(str(report_product_dict['revenue'])) > 14
         else str(report_product_dict['revenue']).ljust(15))
-        print(' ' + output)
-    print(' *******************************************************\n')
+        output += (' ' + product_row + '\n')
+    output += ' *******************************************************\n\n'
+    return output
