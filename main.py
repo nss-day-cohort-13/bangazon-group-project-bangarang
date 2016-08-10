@@ -4,6 +4,7 @@ import order_class
 import payment_options_class
 import order_line_item_class
 import line_item_report
+import order_line_item_class
 
 current_customer = None
 
@@ -26,6 +27,7 @@ def run_create_user():
     sets the current_user to be the new customer,
     updates serialized customer dictionary
     '''
+    global current_customer
     name = input('\n Name: ')
     address = input('\n Address: ')
     city = input('\n City: ')
@@ -34,6 +36,8 @@ def run_create_user():
     phone = input('\n Phone: ')
     new_customer = customer_class.Customer(name, address, city, state, zip_code, phone)
     bangazon.update_serialized_data('customers.txt', new_customer)
+    current_customer = new_customer
+    runner()
 
 def run_select_user():
     '''
@@ -68,6 +72,7 @@ def run_create_payment():
     account_number = input(' Card Number: ')
     new_payment_option = payment_options_class.PaymentOption(name, account_number, current_customer.obj_id)
     bangazon.update_serialized_data('payments.txt', new_payment_option)
+    runner()
 
 def run_select_unpaid_order(new_order_option=False):
     """ Displays all unpaid orders for the user that is currently logged in,
@@ -84,6 +89,7 @@ def run_select_unpaid_order(new_order_option=False):
     global current_customer
     global current_order
     global stored_products
+    user_input = ''
 
     stored_orders = bangazon.deserialize('orders.txt')
     stored_order_line_items = bangazon.deserialize('order_line_items.txt')
@@ -187,7 +193,10 @@ def run_add_products():
 
 
 def run_complete_order():
-    pass
+    stored_order_line_items = bangazon.deserialize('order_line_items.txt')
+    for key,value in stored_order_line_items.items():
+        print('order-line-item', str(value.obj_id) + ', ' + str(value.product_id) + ', ' + str(value.order_id))
+
 
 def initialize():
     global stored_products
