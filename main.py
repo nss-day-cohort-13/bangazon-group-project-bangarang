@@ -4,8 +4,11 @@ import order_class
 import payment_options_class
 import order_line_item_class
 import line_item_report
+import order_line_item_class
+import locale
 
 current_customer = None
+current_order = None
 
 def generate_main_menu():
     '''
@@ -26,6 +29,7 @@ def run_create_user():
     sets the current_user to be the new customer,
     updates serialized customer dictionary
     '''
+    global current_customer
     name = input('\n Name: ')
     address = input('\n Address: ')
     city = input('\n City: ')
@@ -34,6 +38,8 @@ def run_create_user():
     phone = input('\n Phone: ')
     new_customer = customer_class.Customer(name, address, city, state, zip_code, phone)
     bangazon.update_serialized_data('customers.txt', new_customer)
+    current_customer = new_customer
+    runner()
 
 def run_select_user():
     '''
@@ -67,7 +73,10 @@ def run_create_payment():
     name = input(' Name: ')
     account_number = input(' Card Number: ')
     new_payment_option = payment_options_class.PaymentOption(name, account_number, current_customer.obj_id)
+    current_customer.payment_option_ids.append(new_payment_option.obj_id)
+    bangazon.update_serialized_data('customers.txt', current_customer)
     bangazon.update_serialized_data('payments.txt', new_payment_option)
+    runner()
 
 def run_select_unpaid_order(new_order_option=False):
     """ Displays all unpaid orders for the user that is currently logged in,
@@ -84,6 +93,7 @@ def run_select_unpaid_order(new_order_option=False):
     global current_customer
     global current_order
     global stored_products
+    user_input = ''
 
     stored_orders = bangazon.deserialize('orders.txt')
     stored_order_line_items = bangazon.deserialize('order_line_items.txt')
@@ -191,7 +201,51 @@ def run_add_products():
 
 
 def run_complete_order():
-    pass
+    global stored_products
+    global current_customer
+    global current_order
+
+    locale.setlocale(locale.LC_ALL, 'en_US')
+    stored_order_line_items = bangazon.deserialize('order_line_items.txt')
+    order_to_be_paid = current_order.obj_id
+    products_in_order = [value for key,value in stored_order_line_items.items()
+        if order_to_be_paid == value.order_id]
+    product_ids = [item.product_id for item in products_in_order]
+    product_prices = [stored_products[id].price for id in product_ids]
+    format_int_prices = [float(item.replace(',','')[1:]) for item in product_prices]
+    total = 0
+    for item in format_int_prices:
+        total = total + item
+    formatted_total = locale.currency(total, grouping=True)
+    print('Your order total is ' + formatted_total + '. Ready to purchase')
+    choice = input('Y/N > ')
+    if choice == 'Y' or choice == 'y':
+        all_payment_options = bangazon.deserialize('payments.txt')
+        print('all payments', all_payment_options)
+        customer_payment_options = current_customer.payment_option_ids
+        payment_options = [all_payment_options[item] for item in customer_payment_options]
+        for key, payment in enumerate(payment_options):
+            print('\n{0}. {1}'.format(key + 1, payment.name))
+        print('0. Cancel')
+        selection = int(input('What is your choice? > '))
+        if selection >= 1:
+            try:
+                current_order.paid_in_full = True
+                current_order.payment_option_id = payment_options[selection - 1].obj_id
+                bangazon.update_serialized_data('orders.txt', current_order)
+                print('\nYou chose {0}'.format(payment_options[selection - 1].name))
+                print('\n Your order is complete!')
+                runner()
+            except:
+                print('Error: Invalid input.')
+                run_complete_order()
+        if selection < 1:
+            run_complete_order()
+    if choice == 'N' or choice == 'n':
+        runner()
+
+
+
 
 def initialize():
     global stored_products
