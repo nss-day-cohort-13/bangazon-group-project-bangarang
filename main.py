@@ -205,7 +205,7 @@ def run_complete_order():
     global current_customer
     global current_order
 
-    locale.setlocale(locale.LC_ALL, 'en_US')
+    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
     stored_order_line_items = bangazon.deserialize('order_line_items.txt')
     order_to_be_paid = current_order.obj_id
     products_in_order = [value for key,value in stored_order_line_items.items()
