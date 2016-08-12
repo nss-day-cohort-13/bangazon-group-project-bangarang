@@ -6,6 +6,7 @@ import order_line_item_class
 import line_item_report
 import order_line_item_class
 import locale
+import os
 
 current_customer = None
 current_order = None
@@ -30,6 +31,7 @@ def run_create_user():
     updates serialized customer dictionary
     '''
     global current_customer
+    clear_menu()
     name = input('\n Name: ')
     address = input('\n Address: ')
     city = input('\n City: ')
@@ -48,6 +50,7 @@ def run_select_user():
     and sets global current_customer
     '''
     global current_customer
+    clear_menu()
     stored_customers = bangazon.deserialize('customers.txt')
     stored_customers_list = list()
     print('Select User:')
@@ -57,7 +60,7 @@ def run_select_user():
         print('\n {0}. {1}'.format(key + 1, customer.name))
     user_input = int(input('\n > '))
     current_customer = stored_customers[stored_customers_list[user_input - 1]]
-    print('\n Welcome {0}'.format(current_customer.name))
+    # print('\n Welcome {0}'.format(current_customer.name))
     runner()
 
 def run_create_payment():
@@ -67,6 +70,7 @@ def run_create_payment():
     and update serialized payment dictionary
     '''
     global current_customer
+    clear_menu()
     stored_payments = bangazon.deserialize('payments.txt')
     stored_payments_list = list()
     print(' Enter payment information below:')
@@ -95,6 +99,7 @@ def run_select_unpaid_order(new_order_option=False):
     global stored_products
     user_input = ''
 
+    clear_menu()
     stored_orders = bangazon.deserialize('orders.txt')
     stored_order_line_items = bangazon.deserialize('order_line_items.txt')
 
@@ -167,7 +172,7 @@ def run_add_products():
 
     stored_products_list = list()
 
-    print("Select products to add to your order:\n")
+    print("\n Select products to add to your order:\n")
     # displays all available products and prices,
     # and creates an ordered list to compare with the user's input
     for key, product in enumerate(stored_products.values()):
@@ -201,11 +206,20 @@ def run_add_products():
 
 
 def run_complete_order():
+    """ Displays the total for the chosen order and then lets your choose your
+    payment option
+
+    Method arguments:
+    -----------------
+    n/a
+    """
     global stored_products
     global current_customer
     global current_order
 
+    clear_menu()
     locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+
     stored_order_line_items = bangazon.deserialize('order_line_items.txt')
     order_to_be_paid = current_order.obj_id
     products_in_order = [value for key,value in stored_order_line_items.items()
@@ -256,8 +270,17 @@ def initialize():
     global stored_products
     stored_products = bangazon.deserialize('products.txt')
 
+def clear_menu():
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+
 def runner():
     initialize()
+    clear_menu()
+    if current_customer != None:
+        print('\n Current User: ' + current_customer.name)
     print('\n Input option number:')
     print(generate_main_menu())
     user_input = input('\n > ')
