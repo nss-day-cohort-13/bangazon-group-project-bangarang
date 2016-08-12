@@ -71,7 +71,7 @@ def generate_product_popularity_report():
     Generate string output for report dictionary
     '''
 
-    locale.setlocale(locale.LC_ALL, 'en_US')
+    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
     ## Generate report dictionary from order line items
     report = generate_order_line_items_dictionary()
