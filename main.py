@@ -7,6 +7,7 @@ import line_item_report
 import order_line_item_class
 import locale
 import os
+import sqlite3
 
 current_customer = None
 current_order = None
@@ -70,17 +71,38 @@ def run_create_payment():
     and update serialized payment dictionary
     '''
     global current_customer
+    global current_customer_id
     clear_menu()
-    stored_payments = bangazon.deserialize('payments.txt')
-    stored_payments_list = list()
     print(' Enter payment information below:')
     name = input(' Name: ')
     account_number = input(' Card Number: ')
-    new_payment_option = payment_options_class.PaymentOption(name, account_number, current_customer.obj_id)
+    new_payment_option = payment_options_class.PaymentOption(name,
+                         account_number, current_customer.obj_id)
     current_customer.payment_option_ids.append(new_payment_option.obj_id)
-    bangazon.update_serialized_data('customers.txt', current_customer)
-    bangazon.update_serialized_data('payments.txt', new_payment_option)
+
+
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor() #cursor extracts table and holds results with data
+        c.execute("insert into PaymentOption values (?,?,?,?)",
+                  (None, name, account_number, current_customer_id))
+        conn.commit()
+        sqlite3.OperationalError
+
+        print(c.fetchall()) #sqlite3 function to return all results
     runner()
+
+    # global current_customer
+    # clear_menu()
+    # stored_payments = bangazon.deserialize('payments.txt')
+    # stored_payments_list = list()
+    # print(' Enter payment information below:')
+    # name = input(' Name: ')
+    # account_number = input(' Card Number: ')
+    # new_payment_option = payment_options_class.PaymentOption(name, account_number, current_customer.obj_id)
+    # current_customer.payment_option_ids.append(new_payment_option.obj_id)
+    # bangazon.update_serialized_data('customers.txt', current_customer)
+    # bangazon.update_serialized_data('payments.txt', new_payment_option)
+    # runner()
 
 def run_select_unpaid_order(new_order_option=False):
     """ Displays all unpaid orders for the user that is currently logged in,
@@ -234,7 +256,14 @@ def run_complete_order():
     print('Your order total is ' + formatted_total + '. Ready to purchase')
     choice = input('Y/N > ')
     if choice == 'Y' or choice == 'y':
-        all_payment_options = bangazon.deserialize('payments.txt')
+        # all_payment_options = bangazon.deserialize('payments.txt')
+
+###################sql database fetch###############################
+        with sqlite3.connect('bangazon.db') as conn:
+            c = conn.cursor() #cursor extracts table and holds results with data
+            c.execute("select name from PaymentOption")
+            all_payment_options = c.fetchall()
+            print(all_payment_options) #sqlite3 function to return all results
 
         # if customer has no payment options, send them to the create payment option menu
         if len(current_customer.payment_option_ids) == 0:
