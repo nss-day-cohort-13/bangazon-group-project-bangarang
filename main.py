@@ -145,7 +145,7 @@ def run_select_unpaid_order(add_products_menu=False):
     clear_menu()
 
     products_in_orders = bangazon.get_product_names_per_order_for_current_user(current_customer_id)
-
+    print('POI', products_in_orders)
     for key, order in enumerate(products_in_orders):
         print('\n {0}. {1}'.format(key + 1, order[1]))
 
@@ -186,41 +186,49 @@ def run_add_products():
     -----------------
     n/a
     """
-    global stored_products
-    global current_order
+    global current_order_id
 
-    stored_products_list = list()
+    clear_menu()
 
     print("\n Select products to add to your order:\n")
-    # displays all available products and prices,
-    # and creates an ordered list to compare with the user's input
-    for key, product in enumerate(stored_products.values()):
-        stored_products_list.append(product)
-        print('\n {0}. {1} {2}'.format(key + 1, product.name, product.price))
-    print('\n 0. Done Adding Products')
+
+    products = bangazon.get_all_products()
+
+    for key, product in enumerate(products):
+        print('\n {0}. {1} ${2}'.format(key + 1, product[1], product[2]))
+
+    print('\n 0. Done')
 
     try:
-        user_input = int(input("\n > "))
-
+        user_input = int(input(' > '))
     except ValueError:
-        print("\nError: Input must be an integer. Please try again.")
+        print("\nError: Incorrect input. Please try again.")
         run_add_products()
 
+    # what actions to perform based on user input
     if user_input == 0:
         runner()
 
     else:
-        try:
-            # gets the product selcted by the user and creates an
-            # order line item with it's id and the current order id
-            selected_product = stored_products_list[user_input - 1]
-            new_order_line_item = order_line_item_class.OrderLineItem(current_order.obj_id, selected_product.obj_id)
-            bangazon.update_serialized_data('order_line_items.txt', new_order_line_item)
+        selected_product_id = products[user_input - 1][0]
 
-        except IndexError:
-            print("\nError: Input must be an integer in the range of options.")
-
+        bangazon.create_new_order_line_item(current_order_id,
+                                            selected_product_id)
         run_add_products()
+
+
+    # else:
+    #     try:
+    #         # gets the product selcted by the user and creates an
+    #         # order line item with it's id and the current order id
+    #         selected_product = stored_products_list[user_input - 1]
+    #         new_order_line_item = order_line_item_class.OrderLineItem(current_order.obj_id, selected_product.obj_id)
+    #         bangazon.update_serialized_data('order_line_items.txt', new_order_line_item)
+
+    #     except IndexError:
+    #         print("\nError: Input must be an integer in the range of options.")
+
+    #     run_add_products()
 
 
 
