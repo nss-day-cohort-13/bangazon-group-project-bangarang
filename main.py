@@ -93,16 +93,11 @@ def run_select_user():
     # print(stored_customers_list)
     for number, customer in enumerate(stored_customers, start=1):
         print(str(number) + ".) " + customer[1])
-    choice = input('Who do you choose > ')
-
-
-    # print('Select User:')
-    # for key, customer_id in enumerate(stored_customers):
-    #     customer = stored_customers[customer_id]
-    #     stored_customers_list.append[customer_id]
-    #     print('/n {0}. {1}'.format(key + 1, customer.name))
-    # user_input = int(input('/n > '))
-    # current_customer = stored_customers[stored_customers_list[user_input - 1]]
+    choice = int(input('Who do you choose > '))
+    current_customer_id = stored_customers[user_input - 1][0]
+    # if choice == number:
+    #     current_customer_id = customer[0]
+    #     print(current_customer_id)
     runner()
 
 def run_create_payment():
