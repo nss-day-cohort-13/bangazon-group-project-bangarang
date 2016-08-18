@@ -56,6 +56,7 @@ def generate_order_line_items_dictionary():
     return report
 
 def generate_order_totals_dictionary(report):
+    '''Generate order totals'''
     total_orders = 0
     total_customers = 0
     total_revenue = 0
