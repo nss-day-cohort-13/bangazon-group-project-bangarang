@@ -25,11 +25,29 @@ def generate_main_menu():
     '\n 7. Leave Bangazon')
     return output
 
+# def run_create_user():
+#     '''
+#     Creates a new customer,
+#     sets the current_user to be the new customer,
+#     updates serialized customer dictionary
+#     '''
+#     global current_customer
+#     clear_menu()
+#     name = input('\n Name: ')
+#     address = input('\n Address: ')
+#     city = input('\n City: ')
+#     state = input('\n State: ')
+#     zip_code = input('\n Zip Code: ')
+#     phone = input('\n Phone: ')
+#     new_customer = customer_class.Customer(name, address, city, state, zip_code, phone)
+#     bangazon.update_serialized_data('customers.txt', new_customer)
+#     current_customer = new_customer
+#     runner()
+
 def run_create_user():
     '''
     Creates a new customer,
-    sets the current_user to be the new customer,
-    updates serialized customer dictionary
+    sets the current_customer to be the new customer
     '''
     global current_customer
     clear_menu()
@@ -38,11 +56,28 @@ def run_create_user():
     city = input('\n City: ')
     state = input('\n State: ')
     zip_code = input('\n Zip Code: ')
-    phone = input('\n Phone: ')
-    new_customer = customer_class.Customer(name, address, city, state, zip_code, phone)
-    bangazon.update_serialized_data('customers.txt', new_customer)
-    current_customer = new_customer
+    customer_id = bangazon.create_new_customer(name, address, city, state, zip_code)
     runner()
+
+# def run_select_user():
+#     '''
+#     Displays list of customer names,
+#     gets user input to select customer
+#     and sets global current_customer
+#     '''
+#     global current_customer
+#     clear_menu()
+#     stored_customers = bangazon.deserialize('customers.txt')
+#     stored_customers_list = list()
+#     print('Select User:')
+#     for key, customer_id in enumerate(stored_customers):
+#         customer = stored_customers[customer_id]
+#         stored_customers_list.append(customer.obj_id)
+#         print('\n {0}. {1}'.format(key + 1, customer.name))
+#     user_input = int(input('\n > '))
+#     current_customer = stored_customers[stored_customers_list[user_input - 1]]
+#     # print('\n Welcome {0}'.format(current_customer.name))
+#     runner()
 
 def run_select_user():
     '''
@@ -52,16 +87,15 @@ def run_select_user():
     '''
     global current_customer
     clear_menu()
-    stored_customers = bangazon.deserialize('customers.txt')
+    stored_customers = get_all_customers()
     stored_customers_list = list()
     print('Select User:')
     for key, customer_id in enumerate(stored_customers):
         customer = stored_customers[customer_id]
-        stored_customers_list.append(customer.obj_id)
-        print('\n {0}. {1}'.format(key + 1, customer.name))
-    user_input = int(input('\n > '))
+        stored_customers_list.append[customer_id]
+        print('/n {0}. {1}'.format(key + 1, customer.name))
+    user_input = int(input('/n > '))
     current_customer = stored_customers[stored_customers_list[user_input - 1]]
-    # print('\n Welcome {0}'.format(current_customer.name))
     runner()
 
 def run_create_payment():

@@ -1,42 +1,6 @@
 import pickle
 import sqlite3
 
-# def create_payment_option(name, account_number):
-#     global options
-#     global customers
-#     global payment_options
-#     global current_customer
-#     """ Creates a new payment option.
-#     Sets the name of account and account number attributes.
-#     Adds the new payment option data to the payment_options dictionary
-#     using the new payment option's UUID as a key,
-#     and serializes the payment_options dictionary
-#
-#     Method arguments:
-#     -----------------
-#     name(str) -- What the new payment option's name is
-#     account_number(int) -- What the new payment options's account number is
-#     """
-#     options = PaymentOption(name, account_number)
-#     payment_options.update({option.payment_option_id: option})
-#
-#     # saves the new payment option
-#     serialize(payment_options.txt, payment_options)
-#
-#     # update the current customer's payment ids and
-#     # overwrites their info in the list of customers, then saves the updated list
-#     current_customer.payment_option_ids.append(option.payment_option_id)
-#     custormers.update({current_customer.customer_id: current_customer})
-#     serialize(customers.txt, custormers)
-#
-# def create_new_order():
-#     pass
-#
-# def set_current_customer(customer):
-#     global current_customer
-#     '''Sets new user as current user'''
-#     current_customer = customer
-
 def serialize(file_name, data):
     """ Serializes data to a file
 
@@ -69,6 +33,21 @@ def get_all_products():
       conn.commit()
       return c.fetchall()
 
+def get_all_customers():
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
+        c.execute('select * from Customer')
+        conn.commit()
+        return c.fetchall()
+
+def create_new_customer(name, address, city, state, zip_code):
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
+        c.execute('''insert into Customer(name, address, city, state, zip_code)
+        values(?, ?, ?, ?, ?)''', (name, address, city, state, zip_code))
+        conn.commit()
+        return c.lastrowid
+
 def create_new_order_line_item(order_id, product_id):
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
@@ -99,56 +78,6 @@ def get_payment_options_per_customer(customer_id):
         all_payment_options = c.fetchall()
         print(all_payment_options) #sqlite3 function to return all results
 
-# def deserialize():
-#     """ Deserializes customers.txt, orders.txt, and products.txt,
-#     payment_options.txt, and order_line_items.txt
-#     and sets the custormers, orders, products,
-#     payment_options, and order_line_items
-#     attributes to the data respectively.
-#     If an error occurs desirializing any of the files,
-#     the attribute value will be set to an empty dictionary
-#
-#     Method arguments:
-#     -----------------
-#     n/a
-#     """
-#     global customers
-#     global orders
-#     global products
-#     global payment_options
-#     global line_items
-#
-#     try:
-#         with open('customers.txt', 'rb+') as f:
-#             customers = pickle.load(f)
-#     except:
-#         customers = {}
-#
-#     try:
-#         with open('orders.txt', 'rb+') as f:
-#             orders = pickle.load(f)
-#     except:
-#         orders = {}
-#
-#     try:
-#         with open('product.txt', 'rb+') as f:
-#             products = pickle.load(f)
-#     except:
-#         producst = {}
-#
-#     try:
-#         with open('payment_options.txt', 'rb+') as f:
-#             payment_options = pickle.load(f)
-#     except:
-#         payment_options = {}
-#
-#     try:
-#         with open('order_line_items.txt', 'rb+') as f:
-#             order_line_items = pickle.load(f)
-#     except:
-#         order_line_items = {}
-
-
 def create_new_order(customer_id):
 
     with sqlite3.connect('bangazon.db') as conn:
@@ -160,7 +89,6 @@ def create_new_order(customer_id):
         conn.commit()
 
         return c.lastrowid
-
 
 def get_product_names_per_order_for_current_user(customer_id):
 
@@ -176,7 +104,6 @@ def get_product_names_per_order_for_current_user(customer_id):
 
         c.commit()
         return c.fetchall()
-
 
 def finalize_order(payment_option_id, order_id):
 
