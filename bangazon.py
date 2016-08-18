@@ -69,6 +69,13 @@ def get_all_products():
       conn.commit()
       return c.fetchall()
 
+def get_all_customers():
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
+        c.execute('select * from Customer')
+        conn.commit()
+        return c.fetchall()
+
 # def deserialize():
 #     """ Deserializes customers.txt, orders.txt, and products.txt,
 #     payment_options.txt, and order_line_items.txt
