@@ -89,16 +89,9 @@ def run_select_user():
     global current_customer_id
     clear_menu()
     stored_customers = bangazon.get_all_customers()
-    stored_customers_list = list()
     print('Select User:')
-    for key, customer_name in enumerate(stored_customers):
-        customer = stored_customers[customer_name]
-        stored_customers_list.append[customer_name]
-        print('/n {0}. {1}'.format(key + 1, customer.name))
-    user_input = int(input('/n > '))
-    current_customer = stored_customers[stored_customers_list[user_input - 1]]
     for number, customer in enumerate(stored_customers, start=1):
-        print(str(number) + ".) " + customer[1])
+        print(str(number) + ".) " + customer[1]
     choice = int(input('Who do you choose > '))
     current_customer_id = stored_customers[choice - 1][0]
     runner()
