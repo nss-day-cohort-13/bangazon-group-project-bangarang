@@ -3,7 +3,7 @@ import customer_class
 import order_class
 import payment_options_class
 import order_line_item_class
-import line_item_report
+import product_report
 import order_line_item_class
 import locale
 import os
@@ -341,7 +341,7 @@ def runner():
         run_select_unpaid_order()
         # runner()
     elif user_input == '6':
-        print(line_item_report.generate_product_popularity_report())
+        print(product_report.generate_product_popularity_report())
         # runner()
     elif user_input == '7':
         exit()

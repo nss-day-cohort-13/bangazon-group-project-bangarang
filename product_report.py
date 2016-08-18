@@ -1,0 +1,120 @@
+import locale
+import bangazon
+
+def generate_product_report():
+
+    report = dict()
+    stored_order_line_items = bangazon.get_all_order_line_items()
+
+    for line_item in stored_order_line_items:
+        product_tuple = bangazon.get_product_per_product_id(line_item[2])
+        product_name = product_tuple[1]
+        if dict.__contains__(report, product_name):
+            product_id = line_item[2]
+            ## Declare variables for pre-existing...
+            ## order count, customer id set and revenue
+            order_count = report[product_name]['order_count']
+            revenue = report[product_name]['revenue']
+            customer_id_set = report[product_name]['customer_id_set']
+
+        ## Initialize order count and customer id set...
+        # for new report dictionary keys
+        else:
+            order_count = 0
+            revenue = 0
+            customer_id_set = set()
+
+        order_count += 1
+
+        revenue += int(product_tuple[2])
+        customer_id_set.add(bangazon.get_order_per_order_id(line_item[1])[2])
+        report.update({product_name: {'order_count': order_count,
+        'revenue': revenue, 'customer_id_set': customer_id_set,
+        'customer_count': len(customer_id_set)}})
+    print(report)
+    return report
+
+def generate_order_totals_dictionary(report):
+    total_orders = 0
+    total_customers = 0
+    total_revenue = 0
+    for product_name in report:
+        report_product_dictionary = report[product_name]
+        total_orders += report_product_dictionary['order_count']
+        total_customers += report_product_dictionary['customer_count']
+        total_revenue += report_product_dictionary['revenue']
+    return { 'total_orders': total_orders, 'total_customers': total_customers, 'total_revenue': total_revenue}
+
+def generate_product_popularity_report():
+    '''
+    Generate string output for report dictionary
+    '''
+
+    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+
+    ## Generate report dictionary from order line items
+    report = generate_product_report()
+    ## Generate totals from report dictionary
+    report_totals_dict = generate_order_totals_dictionary(report)
+    total_orders = report_totals_dict['total_orders']
+    total_customers = report_totals_dict['total_customers']
+    total_revenue = report_totals_dict['total_revenue']
+
+    ## Output header
+    output = ('\n Product           Orders     Customers  Revenue\n' +
+    ' *******************************************************\n')
+
+    ## Iterate through report dictionary and format values for output
+    for report_product_name in report:
+
+        ## Declare variable for dictionaries associated...
+        ## with report dictionary keys
+        report_product_dict = report[report_product_name]
+
+        ## Product name
+        product_row = ((report_product_name[:14] + '... ')
+        if len(report_product_name) > 17
+        else report_product_name.ljust(18))
+
+        ## Order count
+        product_row += ((report_product_dict['order_count'][:7] + '... ')
+        if len(str(report_product_dict['order_count'])) > 10
+        else str(report_product_dict['order_count']).ljust(11))
+
+        ## Customer count
+        product_row += ((report_product_dict['customer_count'][:7] + '... ')
+        if len(str(report_product_dict['customer_count'])) > 10
+        else str(report_product_dict['customer_count']).ljust(11))
+
+        ## Revenue
+        product_row += ((locale.currency(report_product_dict['revenue'], grouping = True)[:11] + '... ')
+        if len(str(report_product_dict['revenue'])) > 14
+        else locale.currency(report_product_dict['revenue'], grouping = True).ljust(15))
+
+        ## Appends new product row to output
+        output += (' ' + product_row + '\n')
+
+    output += ' *******************************************************\n'
+
+    ## Product name
+    totals_row = ('Totals:'.ljust(18))
+
+    ## Order count
+    totals_row += ((total_orders[:7] + '... ')
+    if len(str(total_orders)) > 10
+    else str(total_orders).ljust(11))
+
+    ## Customer count
+    totals_row += ((total_customers[:7] + '... ')
+    if len(str(total_customers)) > 10
+    else str(total_customers).ljust(11))
+
+    ## Revenue
+    totals_row += ((locale.currency(total_revenue, grouping = True)[:11] + '... ')
+    if len(str(total_revenue)) > 14
+    else locale.currency(total_revenue, grouping = True).ljust(15))
+
+    ## Appends new product row to output
+    output += (' ' + totals_row + '\n')
+
+    return output

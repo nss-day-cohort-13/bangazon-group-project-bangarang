@@ -8,6 +8,12 @@ def get_all_products():
         conn.commit()
         return c.fetchall()
 
+def get_product_per_product_id(product_id):
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
+        c.execute('SELECT * FROM Product WHERE product_id={0}'.format(product_id))
+        conn.commit()
+        return c.fetchone()
 
 def get_all_customers():
     with sqlite3.connect('bangazon.db') as conn:
@@ -15,7 +21,6 @@ def get_all_customers():
         c.execute('select * from Customer')
         conn.commit()
         return c.fetchall()
-
 
 def create_new_customer(name, address, city, state, zip_code):
     with sqlite3.connect('bangazon.db') as conn:
@@ -48,6 +53,12 @@ def get_all_order_line_items():
         conn.commit()
         return c.fetchall()
 
+def get_order_per_order_id(order_id):
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
+        c.execute("SELECT * FROM Orders WHERE order_id={0}".format(order_id))
+        conn.commit()
+        return c.fetchone()
 
 def get_product_id_list_per_order(order_id):
     with sqlite3.connect('bangazon.db') as conn:
