@@ -83,7 +83,21 @@ def get_product_id_list_per_order(order_id):
       conn.commit()
       return c.fetchall()
 
+def create_new_payment_option():
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor() #cursor extracts table and holds results with data
+        c.execute("insert into PaymentOption values (?,?,?,?)",
+                  (None, name, account_number, current_customer_id))
+        conn.commit()
+        sqlite3.OperationalError
+        return c.fetchall() #sqlite3 function to return all results
 
+def get_payment_options_per_customer(customer_id):
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor() #cursor extracts table and holds results with data
+        c.execute("select name from PaymentOption WHERE customer_id={0}".format(customer_id))
+        all_payment_options = c.fetchall()
+        print(all_payment_options) #sqlite3 function to return all results
 
 # def deserialize():
 #     """ Deserializes customers.txt, orders.txt, and products.txt,
