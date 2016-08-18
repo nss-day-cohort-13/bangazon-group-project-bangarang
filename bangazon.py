@@ -149,25 +149,20 @@ def get_payment_options_per_customer(customer_id):
 #         order_line_items = {}
 
 
-def create_new_order():
-    global current_customer_id
-    global current_order_id
+def create_new_order(customer_id):
 
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
 
-        c.execute("insert into Orders (customer_id) values (?)",
-                  (current_customer_id))
-
-        # sets the current_order_id as the
-        current_order_id = c.lastrowid
+        c.execute("INSERT INTO Orders (customer_id) VALUES (?)",
+                  (customer_id,))
 
         conn.commit()
 
+        return c.lastrowid
 
-def get_product_names_per_order_for_current_user():
-    global current_customer_id
-    global current_order_id
+
+def get_product_names_per_order_for_current_user(customer_id):
 
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
@@ -177,7 +172,20 @@ def get_product_names_per_order_for_current_user():
                   INNER JOIN Product p ON oli.product_id = p.product_id
                   INNER JOIN Orders o ON oli.order_id = o.order_id
                   WHERE o.customer_id = ?
-                  GROUP BY o.order_id""", (current_customer_id))
+                  GROUP BY o.order_id""", (customer_id,))
 
         c.commit()
         return c.fetchall()
+
+
+def finalize_order(payment_option_id, order_id):
+
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
+
+        c.execute("""UPDATE Orders
+                  SET payment_options_id = ?, paid_in_full = 1
+                  WHERE order_id = ?""",
+                  (payment_option_id, order_id))
+
+        c.commit()
