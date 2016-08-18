@@ -76,6 +76,14 @@ def get_all_customers():
         conn.commit()
         return c.fetchall()
 
+def create_new_customer(name, address, city, state, zip_code):
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
+        c.execute('''insert into Customer(name, address, city, state, zip_code)
+        values(?, ?, ?, ?, ?)''', (name, address, city, state, zip_code))
+        conn.commit()
+        return c.lastrowid
+
 # def deserialize():
 #     """ Deserializes customers.txt, orders.txt, and products.txt,
 #     payment_options.txt, and order_line_items.txt

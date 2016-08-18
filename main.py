@@ -25,12 +25,31 @@ def generate_main_menu():
     '\n 7. Leave Bangazon')
     return output
 
+# def run_create_user():
+#     '''
+#     Creates a new customer,
+#     sets the current_user to be the new customer,
+#     updates serialized customer dictionary
+#     '''
+#     global current_customer
+#     clear_menu()
+#     name = input('\n Name: ')
+#     address = input('\n Address: ')
+#     city = input('\n City: ')
+#     state = input('\n State: ')
+#     zip_code = input('\n Zip Code: ')
+#     phone = input('\n Phone: ')
+#     new_customer = customer_class.Customer(name, address, city, state, zip_code, phone)
+#     bangazon.update_serialized_data('customers.txt', new_customer)
+#     current_customer = new_customer
+#     runner()
+
 def run_create_user():
     '''
     Creates a new customer,
-    sets the current_user to be the new customer,
-    updates serialized customer dictionary
+    sets the current_customer to be the new customer
     '''
+
     global current_customer
     clear_menu()
     name = input('\n Name: ')
@@ -38,11 +57,7 @@ def run_create_user():
     city = input('\n City: ')
     state = input('\n State: ')
     zip_code = input('\n Zip Code: ')
-    phone = input('\n Phone: ')
-    new_customer = customer_class.Customer(name, address, city, state, zip_code, phone)
-    bangazon.update_serialized_data('customers.txt', new_customer)
-    current_customer = new_customer
-    runner()
+    bangazon.create_new_customer(name, address, city, state, zip_code)
 
 def run_select_user():
     '''
