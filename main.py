@@ -141,70 +141,89 @@ def run_select_unpaid_order(new_order_option=False):
                                  If false, calls the run_complete_order method.
                                  Defaults to False.
     """
-    global current_customer
-    global current_order
-    global stored_products
-    user_input = ''
+    global current_customer_id
+    global current_order_id
+    # global stored_products
+    # user_input = ''
 
     clear_menu()
-    stored_orders = bangazon.deserialize('orders.txt')
-    stored_order_line_items = bangazon.deserialize('order_line_items.txt')
 
-    # gets all orders that belong to the customer logged in and have not yet been paid
-    current_customer_orders = [order for order in stored_orders.values()
-                               if order.customer_id == current_customer.obj_id and
-                               order.paid_in_full is False]
+    products_in_orders = bangazon.get_product_names_per_order_for_current_user(current_customer_id)
 
-    for key, order in enumerate(current_customer_orders):
-        # gets the first 5 order_line items' product ids that correspond to the current order
-        order_items = [item.product_id for item in stored_order_line_items.values()
-                       if item.order_id == order.obj_id][0:5]
+    for key, order in enumerate(products_in_orders):
+        print('\n {0}. [{1}'.format(key + 1, order[1:]))
 
-        # gets the names of each product for the ids stored in order_items
-        product_names_to_display = [stored_products[order_item].name for order_item in order_items]
-        # send message to menu if there are no products in an order
-        if len(product_names_to_display) == 0:
-            product_names_to_display = ["No products added yet"]
-
-        print('\n {0}. {1}'.format(key + 1, ", ".join(product_names_to_display)))
-
-    # display New Order option if True, otherwise don't print it
-    if new_order_option:
-        print('\n 100. Start New Order')
-
-    print('\n 0. Cancel')
-
-    # get user input in integer form
     try:
         user_input = int(input("\n > "))
 
     except ValueError:
         print("\nError: Input must be an integer. Please try again.")
-        run_add_products()
+        run_select_unpaid_order()
 
-    if user_input == 0:
-        runner()
+    current_order_id = products_in_orders[user_input][0]
 
-    if new_order_option and user_input == 100:
-        # creates a new order and sets it as the global current_order and saves the data
-        current_order = order_class.Order(current_customer.obj_id)
-        bangazon.update_serialized_data('orders.txt', current_order)
 
-    else:
-        try:
-            current_order = current_customer_orders[user_input - 1]
 
-        except IndexError:
-            print("\nError: Input must be the number value next to the option you wish to select.")
-            run_select_unpaid_order()
+    # stored_orders = bangazon.deserialize('orders.txt')
+    # stored_order_line_items = bangazon.deserialize('order_line_items.txt')
 
-    # if the new order option is true, go to menu to add products to the order,
-    # otherwise go to the menu to complete an order
-    if new_order_option:
-        run_add_products()
+    # # gets all orders that belong to the customer logged in and have not yet been paid
+    # current_customer_orders = [order for order in stored_orders.values()
+    #                            if order.customer_id == current_customer.obj_id and
+    #                            order.paid_in_full is False]
 
-    else:
-        run_complete_order()
+    # for key, order in enumerate(current_customer_orders):
+    #     # gets the first 5 order_line items' product ids that correspond to the current order
+    #     order_items = [item.product_id for item in stored_order_line_items.values()
+    #                    if item.order_id == order.obj_id][0:5]
+
+    #     # gets the names of each product for the ids stored in order_items
+    #     product_names_to_display = [stored_products[order_item].name for order_item in order_items]
+    #     # send message to menu if there are no products in an order
+    #     if len(product_names_to_display) == 0:
+    #         product_names_to_display = ["No products added yet"]
+
+    #     print('\n {0}. {1}'.format(key + 1, ", ".join(product_names_to_display)))
+
+    # # display New Order option if True, otherwise don't print it
+    # if new_order_option:
+    #     print('\n 100. Start New Order')
+
+    # print('\n 0. Cancel')
+
+    # # get user input in integer form
+    # try:
+    #     user_input = int(input("\n > "))
+
+    # except ValueError:
+    #     print("\nError: Input must be an integer. Please try again.")
+    #     run_add_products()
+
+    # if user_input == 0:
+    #     runner()
+
+    # if new_order_option and user_input == 100:
+    #     # creates a new order and sets it as the global current_order and saves the data
+    #     current_order = order_class.Order(current_customer.obj_id)
+    #     bangazon.update_serialized_data('orders.txt', current_order)
+
+    # else:
+    #     try:
+    #         current_order = current_customer_orders[user_input - 1]
+
+    #     except IndexError:
+    #         print("\nError: Input must be the number value next to the option you wish to select.")
+    #         run_select_unpaid_order()
+
+    # # if the new order option is true, go to menu to add products to the order,
+    # # otherwise go to the menu to complete an order
+    # if new_order_option:
+    #     run_add_products()
+
+    # else:
+    #     run_complete_order()
+
+
 
 def run_add_products():
     """ Displays all products and prices, and
