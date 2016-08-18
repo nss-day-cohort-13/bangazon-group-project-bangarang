@@ -8,8 +8,8 @@ import order_line_item_class
 import locale
 import os
 
-current_customer = None
-current_order = None
+current_customer_id = None
+current_order_id = None
 
 def generate_main_menu():
     '''
