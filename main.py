@@ -1,10 +1,10 @@
 import bangazon
-import customer_class
-import order_class
-import payment_options_class
-import order_line_item_class
+# import customer_class
+# import order_class
+# import payment_options_class
+# import order_line_item_class
 import line_item_report
-import order_line_item_class
+# import order_line_item_class
 import locale
 import os
 import sqlite3
@@ -26,7 +26,6 @@ def generate_main_menu():
               '\n 7. Leave Bangazon')
     return output
 
-
 def run_create_user():
     '''
     Creates a new customer,
@@ -43,27 +42,6 @@ def run_create_user():
     current_customer_id = customer_id
     runner()
 
-# def run_select_user():
-#     '''
-#     Displays list of customer names,
-#     gets user input to select customer
-#     and sets global current_customer
-#     '''
-#     global current_customer
-#     clear_menu()
-#     stored_customers = bangazon.deserialize('customers.txt')
-#     stored_customers_list = list()
-#     print('Select User:')
-#     for key, customer_id in enumerate(stored_customers):
-#         customer = stored_customers[customer_id]
-#         stored_customers_list.append(customer.obj_id)
-#         print('\n {0}. {1}'.format(key + 1, customer.name))
-#     user_input = int(input('\n > '))
-#     current_customer = stored_customers[stored_customers_list[user_input - 1]]
-#     # print('\n Welcome {0}'.format(current_customer.name))
-#     runner()
-
-
 def run_select_user():
     '''
     Displays list of customer names,
@@ -75,7 +53,7 @@ def run_select_user():
     stored_customers = bangazon.get_all_customers()
     print('Select User:')
     for number, customer in enumerate(stored_customers, start=1):
-        print(str(number) + ".) " + customer[1])
+        print(str(number)) + ".) " + customer[1]
     choice = int(input('Who do you choose > '))
     current_customer_id = stored_customers[choice - 1][0]
     runner()
@@ -94,7 +72,6 @@ def run_create_payment():
     account_number = input(' Card Number: ')
     bangazon.create_new_payment_option(name, account_number, current_customer_id)
     runner()
-
 
 def run_select_unpaid_order(complete_an_order=False):
     """ Displays all unpaid orders for the user that is currently logged in,
@@ -201,6 +178,7 @@ def run_complete_order():
     global current_order_id
 
     clear_menu()
+
     prices = bangazon.get_prices_in_order(current_order_id)
 
     total_price = sum([int(price[0]) for price in prices])
