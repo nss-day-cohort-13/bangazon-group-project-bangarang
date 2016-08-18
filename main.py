@@ -49,7 +49,7 @@ def run_create_user():
     Creates a new customer,
     sets the current_customer to be the new customer
     '''
-    global current_customer
+    global current_customer_id
     clear_menu()
     name = input('\n Name: ')
     address = input('\n Address: ')
@@ -57,6 +57,7 @@ def run_create_user():
     state = input('\n State: ')
     zip_code = input('\n Zip Code: ')
     customer_id = bangazon.create_new_customer(name, address, city, state, zip_code)
+    current_customer_id = customer_id
     runner()
 
 # def run_select_user():
@@ -85,19 +86,13 @@ def run_select_user():
     gets user input to select customer
     and sets global current_customer
     '''
-    global current_customer
+    global current_customer_id
     clear_menu()
     stored_customers = bangazon.get_all_customers()
-    # print(stored_customers)
-    stored_customers_list = list()
-    # print(stored_customers_list)
     for number, customer in enumerate(stored_customers, start=1):
         print(str(number) + ".) " + customer[1])
     choice = int(input('Who do you choose > '))
-    current_customer_id = stored_customers[user_input - 1][0]
-    # if choice == number:
-    #     current_customer_id = customer[0]
-    #     print(current_customer_id)
+    current_customer_id = stored_customers[choice - 1][0]
     runner()
 
 def run_create_payment():
@@ -325,7 +320,8 @@ def runner():
     clear_menu()
     global current_customer_id
     if current_customer_id != None:
-        print('\n Current User: ' + current_customer.name)
+        current_customer = bangazon.get_customer_per_customer_id(current_customer_id)
+        print('\n Current User: ' + current_customer)
     print('\n Input option number:')
     print(generate_main_menu())
     user_input = input('\n > ')

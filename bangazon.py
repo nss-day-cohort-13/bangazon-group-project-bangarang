@@ -29,10 +29,10 @@ def create_new_customer(name, address, city, state, zip_code):
 def get_customer_per_customer_id(customer_id):
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()  #cursor extracts table and holds results with data
-        c.execute("SELECT * FROM Customer WHERE customer_id={0}".format(customer_id))
-        all_payment_options = c.fetchall()
-        print(all_payment_options)  #sqlite3 function to return all results
-
+        c.execute("SELECT * FROM Customer WHERE customer_id=?", (customer_id,))
+        customer = c.fetchall()
+        current_customer = customer[0][1]
+        return current_customer
 
 def create_new_order_line_item(order_id, product_id):
     with sqlite3.connect('bangazon.db') as conn:
