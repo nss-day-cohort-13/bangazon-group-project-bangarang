@@ -89,10 +89,21 @@ def run_select_user():
     global current_customer_id
     clear_menu()
     stored_customers = bangazon.get_all_customers()
+<<<<<<< HEAD
+    stored_customers_list = list()
+    print('Select User:')
+    for key, customer_name in enumerate(stored_customers):
+        customer = stored_customers[customer_name]
+        stored_customers_list.append[customer_name]
+        print('/n {0}. {1}'.format(key + 1, customer.name))
+    user_input = int(input('/n > '))
+    current_customer = stored_customers[stored_customers_list[user_input - 1]]
+=======
     for number, customer in enumerate(stored_customers, start=1):
         print(str(number) + ".) " + customer[1])
     choice = int(input('Who do you choose > '))
     current_customer_id = stored_customers[choice - 1][0]
+>>>>>>> master
     runner()
 
 def run_create_payment():
@@ -101,16 +112,13 @@ def run_create_payment():
     create new payment option from user input,
     and update serialized payment dictionary
     '''
-    global current_customer
     global current_customer_id
+    current_customer_id = 1
     clear_menu()
     print(' Enter payment information below:')
     name = input(' Name: ')
     account_number = input(' Card Number: ')
-    new_payment_option = payment_options_class.PaymentOption(name,
-                         account_number, current_customer.obj_id)
-    current_customer.payment_option_ids.append(new_payment_option.obj_id)
-    print(bangazon.create_new_payment_option())
+    bangazon.create_new_payment_option(name, account_number, current_customer_id)
     runner()
 
     # global current_customer

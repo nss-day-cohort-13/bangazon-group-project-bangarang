@@ -56,7 +56,6 @@ def create_new_payment_option(name, account_number, current_customer_id):
         c.execute("INSERT INTO PaymentOption VALUES (?,?,?,?)",
                   (None, name, account_number, current_customer_id))
         conn.commit()
-        sqlite3.OperationalError
         return c.fetchall()  #sqlite3 function to return all results
 
 
