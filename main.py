@@ -49,7 +49,7 @@ def run_create_user():
     Creates a new customer,
     sets the current_customer to be the new customer
     '''
-    global current_customer
+    global current_customer_id
     clear_menu()
     name = input('\n Name: ')
     address = input('\n Address: ')
@@ -57,6 +57,7 @@ def run_create_user():
     state = input('\n State: ')
     zip_code = input('\n Zip Code: ')
     customer_id = bangazon.create_new_customer(name, address, city, state, zip_code)
+    current_customer_id = customer_id
     runner()
 
 # def run_select_user():
@@ -85,9 +86,10 @@ def run_select_user():
     gets user input to select customer
     and sets global current_customer
     '''
-    global current_customer
+    global current_customer_id
     clear_menu()
     stored_customers = bangazon.get_all_customers()
+<<<<<<< HEAD
     stored_customers_list = list()
     print('Select User:')
     for key, customer_name in enumerate(stored_customers):
@@ -96,6 +98,12 @@ def run_select_user():
         print('/n {0}. {1}'.format(key + 1, customer.name))
     user_input = int(input('/n > '))
     current_customer = stored_customers[stored_customers_list[user_input - 1]]
+=======
+    for number, customer in enumerate(stored_customers, start=1):
+        print(str(number) + ".) " + customer[1])
+    choice = int(input('Who do you choose > '))
+    current_customer_id = stored_customers[choice - 1][0]
+>>>>>>> master
     runner()
 
 def run_create_payment():
@@ -320,28 +328,29 @@ def runner():
     clear_menu()
     global current_customer_id
     if current_customer_id != None:
-        print('\n Current User: ' )
+        current_customer = bangazon.get_customer_per_customer_id(current_customer_id)
+        print('\n Current User: ' + current_customer)
     print('\n Input option number:')
     print(generate_main_menu())
     user_input = input('\n > ')
     if user_input == '1':
         run_create_user()
-        runner()
+        # runner()
     elif user_input == '2':
         run_select_user()
-        runner()
+        # runner()
     elif user_input == '3':
         run_create_payment()
-        runner()
+        # runner()
     elif user_input == '4':
         run_select_unpaid_order(True)
-        runner()
+        # runner()
     elif user_input == '5':
         run_select_unpaid_order()
-        runner()
+        # runner()
     elif user_input == '6':
         print(line_item_report.generate_product_popularity_report())
-        runner()
+        # runner()
     elif user_input == '7':
         exit()
 
