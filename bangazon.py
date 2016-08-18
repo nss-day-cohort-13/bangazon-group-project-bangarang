@@ -1,42 +1,6 @@
 import pickle
 import sqlite3
 
-# def create_payment_option(name, account_number):
-#     global options
-#     global customers
-#     global payment_options
-#     global current_customer
-#     """ Creates a new payment option.
-#     Sets the name of account and account number attributes.
-#     Adds the new payment option data to the payment_options dictionary
-#     using the new payment option's UUID as a key,
-#     and serializes the payment_options dictionary
-#
-#     Method arguments:
-#     -----------------
-#     name(str) -- What the new payment option's name is
-#     account_number(int) -- What the new payment options's account number is
-#     """
-#     options = PaymentOption(name, account_number)
-#     payment_options.update({option.payment_option_id: option})
-#
-#     # saves the new payment option
-#     serialize(payment_options.txt, payment_options)
-#
-#     # update the current customer's payment ids and
-#     # overwrites their info in the list of customers, then saves the updated list
-#     current_customer.payment_option_ids.append(option.payment_option_id)
-#     custormers.update({current_customer.customer_id: current_customer})
-#     serialize(customers.txt, custormers)
-#
-# def create_new_order():
-#     pass
-#
-# def set_current_customer(customer):
-#     global current_customer
-#     '''Sets new user as current user'''
-#     current_customer = customer
-
 def serialize(file_name, data):
     """ Serializes data to a file
 
@@ -98,75 +62,35 @@ def get_product_id_list_per_order(order_id):
       conn.commit()
       return c.fetchall()
 
-# def deserialize():
-#     """ Deserializes customers.txt, orders.txt, and products.txt,
-#     payment_options.txt, and order_line_items.txt
-#     and sets the custormers, orders, products,
-#     payment_options, and order_line_items
-#     attributes to the data respectively.
-#     If an error occurs desirializing any of the files,
-#     the attribute value will be set to an empty dictionary
-#
-#     Method arguments:
-#     -----------------
-#     n/a
-#     """
-#     global customers
-#     global orders
-#     global products
-#     global payment_options
-#     global line_items
-#
-#     try:
-#         with open('customers.txt', 'rb+') as f:
-#             customers = pickle.load(f)
-#     except:
-#         customers = {}
-#
-#     try:
-#         with open('orders.txt', 'rb+') as f:
-#             orders = pickle.load(f)
-#     except:
-#         orders = {}
-#
-#     try:
-#         with open('product.txt', 'rb+') as f:
-#             products = pickle.load(f)
-#     except:
-#         producst = {}
-#
-#     try:
-#         with open('payment_options.txt', 'rb+') as f:
-#             payment_options = pickle.load(f)
-#     except:
-#         payment_options = {}
-#
-#     try:
-#         with open('order_line_items.txt', 'rb+') as f:
-#             order_line_items = pickle.load(f)
-#     except:
-#         order_line_items = {}
+def create_new_payment_option():
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor() #cursor extracts table and holds results with data
+        c.execute("insert into PaymentOption values (?,?,?,?)",
+                  (None, name, account_number, current_customer_id))
+        conn.commit()
+        sqlite3.OperationalError
+        return c.fetchall() #sqlite3 function to return all results
 
+def get_payment_options_per_customer(customer_id):
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor() #cursor extracts table and holds results with data
+        c.execute("select name from PaymentOption WHERE customer_id={0}".format(customer_id))
+        all_payment_options = c.fetchall()
+        print(all_payment_options) #sqlite3 function to return all results
 
-def create_new_order():
-    global current_customer_id
-    global current_order_id
+def create_new_order(customer_id):
 
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
 
-        c.execute("insert into Orders (customer_id) values (?)",
-                  (current_customer_id))
-
-        # sets the current_order_id as the
-        current_order_id = c.lastrowid
+        c.execute("INSERT INTO Orders (customer_id) VALUES (?)",
+                  (customer_id,))
 
         conn.commit()
 
+        return c.lastrowid
 
-def get_product_names_per_order_for_current_user():
-    global current_customer_id
-    global current_order_id
+def get_product_names_per_order_for_current_user(customer_id):
 
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
@@ -176,7 +100,19 @@ def get_product_names_per_order_for_current_user():
                   INNER JOIN Product p ON oli.product_id = p.product_id
                   INNER JOIN Orders o ON oli.order_id = o.order_id
                   WHERE o.customer_id = ?
-                  GROUP BY o.order_id""", (current_customer_id))
+                  GROUP BY o.order_id""", (customer_id,))
 
         c.commit()
         return c.fetchall()
+
+def finalize_order(payment_option_id, order_id):
+
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
+
+        c.execute("""UPDATE Orders
+                  SET payment_options_id = ?, paid_in_full = 1
+                  WHERE order_id = ?""",
+                  (payment_option_id, order_id))
+
+        c.commit()

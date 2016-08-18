@@ -113,16 +113,7 @@ def run_create_payment():
     new_payment_option = payment_options_class.PaymentOption(name,
                          account_number, current_customer.obj_id)
     current_customer.payment_option_ids.append(new_payment_option.obj_id)
-
-
-    with sqlite3.connect('bangazon.db') as conn:
-        c = conn.cursor() #cursor extracts table and holds results with data
-        c.execute("insert into PaymentOption values (?,?,?,?)",
-                  (None, name, account_number, current_customer_id))
-        conn.commit()
-        sqlite3.OperationalError
-
-        print(c.fetchall()) #sqlite3 function to return all results
+    print(bangazon.create_new_payment_option())
     runner()
 
     # global current_customer
@@ -293,11 +284,7 @@ def run_complete_order():
         # all_payment_options = bangazon.deserialize('payments.txt')
 
 ###################sql database fetch###############################
-        with sqlite3.connect('bangazon.db') as conn:
-            c = conn.cursor() #cursor extracts table and holds results with data
-            c.execute("select name from PaymentOption")
-            all_payment_options = c.fetchall()
-            print(all_payment_options) #sqlite3 function to return all results
+        print()
 
         # if customer has no payment options, send them to the create payment option menu
         if len(current_customer.payment_option_ids) == 0:
