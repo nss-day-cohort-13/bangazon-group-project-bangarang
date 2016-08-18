@@ -41,8 +41,16 @@ def create_new_order_line_item(order_id, product_id):
         c.execute("INSERT INTO OrderLineItem (order_id, product_id) VALUES (?, ?)",
                   (order_id, product_id))
         conn.commit()
+        
+def get_all_order_line_items():
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
+        c.execute("SELECT * FROM OrderLineItem")
+        conn.commit()
+        return c.fetchall()
 
 # get product ID from database
+
 def get_product_id_list_per_order(order_id):
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
