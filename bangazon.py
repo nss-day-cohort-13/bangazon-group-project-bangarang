@@ -48,6 +48,14 @@ def create_new_customer(name, address, city, state, zip_code):
         conn.commit()
         return c.lastrowid
 
+def get_customer_per_customer_id(customer_id):
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor() #cursor extracts table and holds results with data
+        c.execute("SELECT * FROM Customer WHERE customer_id={0}".format(customer_id))
+        all_payment_options = c.fetchall()
+        print(all_payment_options) #sqlite3 function to return all results
+
+
 def create_new_order_line_item(order_id, product_id):
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
@@ -65,7 +73,7 @@ def get_product_id_list_per_order(order_id):
 def create_new_payment_option():
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor() #cursor extracts table and holds results with data
-        c.execute("insert into PaymentOption values (?,?,?,?)",
+        c.execute("INSERT INTO PaymentOption VALUES (?,?,?,?)",
                   (None, name, account_number, current_customer_id))
         conn.commit()
         sqlite3.OperationalError
@@ -74,7 +82,7 @@ def create_new_payment_option():
 def get_payment_options_per_customer(customer_id):
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor() #cursor extracts table and holds results with data
-        c.execute("select name from PaymentOption WHERE customer_id={0}".format(customer_id))
+        c.execute("SELECT name FROM PaymentOption WHERE customer_id={0}".format(customer_id))
         all_payment_options = c.fetchall()
         print(all_payment_options) #sqlite3 function to return all results
 
