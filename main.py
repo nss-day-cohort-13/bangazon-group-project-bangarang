@@ -320,9 +320,9 @@ def clear_menu():
         os.system('clear')
 
 def runner():
-    initialize()
     clear_menu()
-    if current_customer != None:
+    global current_customer_id
+    if current_customer_id != None:
         print('\n Current User: ' + current_customer.name)
     print('\n Input option number:')
     print(generate_main_menu())
