@@ -91,9 +91,10 @@ def get_product_names_per_order_for_current_user(customer_id):
                   INNER JOIN Product p ON oli.product_id = p.product_id
                   INNER JOIN Orders o ON oli.order_id = o.order_id
                   WHERE o.customer_id = ?
+                  AND o.paid_in_full = 0
                   GROUP BY o.order_id""", (customer_id,))
 
-        c.commit()
+        conn.commit()
         return c.fetchall()
 
 
@@ -107,4 +108,4 @@ def finalize_order(payment_option_id, order_id):
                   WHERE order_id = ?""",
                   (payment_option_id, order_id))
 
-        c.commit()
+        conn.commit()
