@@ -292,13 +292,6 @@ def run_complete_order():
     if choice == 'N' or choice == 'n':
         runner()
 
-
-
-
-def initialize():
-    global stored_products
-    stored_products = bangazon.deserialize('products.txt')
-
 def clear_menu():
     if os.name == 'nt':
         os.system('cls')

@@ -1,4 +1,5 @@
 import pickle
+import sqlite3
 
 # def create_payment_option(name, account_number):
 #     global options
@@ -61,6 +62,12 @@ def update_serialized_data(file, new_object):
     stored_dict.update({new_object.obj_id: new_object})
     serialize(file, stored_dict)
 
+def get_all_products():
+    with sqlite3.connect('bangazon.db') as conn:
+      c = conn.cursor()
+      c.execute("select * from Product")
+      conn.commit()
+      return c.fetchall()
 
 # def deserialize():
 #     """ Deserializes customers.txt, orders.txt, and products.txt,
