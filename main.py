@@ -129,6 +129,7 @@ def run_create_payment():
     # bangazon.update_serialized_data('payments.txt', new_payment_option)
     # runner()
 
+
 def run_select_unpaid_order(add_products_menu=False):
     """ Displays all unpaid orders for the user that is currently logged in,
     and allows them to select which one they want. Will call the method to add products to
@@ -148,8 +149,6 @@ def run_select_unpaid_order(add_products_menu=False):
 
     products_in_orders = bangazon.get_product_names_per_order_for_current_user(current_customer_id)
 
-    print("PIO", products_in_orders)
-
     for key, order in enumerate(products_in_orders):
         print('\n {0}. {1}'.format(key + 1, order[1]))
 
@@ -165,7 +164,7 @@ def run_select_unpaid_order(add_products_menu=False):
         print("\nError: Input must be an integer. Please try again.")
         run_select_unpaid_order()
 
-
+    # what actions to perform based on user input
     if user_input == 0:
         runner()
 
