@@ -6,3 +6,4 @@ payments.txt
 order_line_items.txt
 orders.txt
 bangazon.db-journal
+bangazon.db
