@@ -1,10 +1,10 @@
 import bangazon
-import customer_class
-import order_class
-import payment_options_class
-import order_line_item_class
+# import customer_class
+# import order_class
+# import payment_options_class
+# import order_line_item_class
 import line_item_report
-import order_line_item_class
+# import order_line_item_class
 import locale
 import os
 import sqlite3
@@ -52,7 +52,7 @@ def run_select_user():
     stored_customers = bangazon.get_all_customers()
     print('Select User:')
     for number, customer in enumerate(stored_customers, start=1):
-        print(str(number) + ".) " + customer[1]
+        print(str(number)) + ".) " + customer[1]
     choice = int(input('Who do you choose > '))
     current_customer_id = stored_customers[choice - 1][0]
     runner()
