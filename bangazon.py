@@ -20,7 +20,7 @@ def get_all_customers():
 def create_new_customer(name, address, city, state, zip_code):
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
-        c.execute('''insert into Customer(name, address, city, state, zip_code)
+        c.execute('''insert into Customer(name, address, city, state_of_residence, zip_code)
         values(?, ?, ?, ?, ?)''', (name, address, city, state, zip_code))
         conn.commit()
         return c.lastrowid
