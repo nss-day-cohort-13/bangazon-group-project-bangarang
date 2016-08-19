@@ -3,7 +3,7 @@ import bangazon
 
 def generate_product_report():
 '''
-Generate report dictionary from serialized order line items
+Generate report dictionary from stored order line items
 '''
 
     ## Declare main report dictionary...
@@ -58,6 +58,9 @@ Generate report dictionary from serialized order line items
     return report
 
 def generate_order_totals_dictionary(report):
+    '''
+    Generates total orders, customers, and revenue for product popularity report
+    '''
 
     ## Initialize totals variables
     total_orders = 0
