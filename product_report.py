@@ -75,7 +75,8 @@ def generate_order_totals_dictionary(report):
         total_customers += report_product_dictionary['customer_count']
         total_revenue += report_product_dictionary['revenue']
 
-    return { 'total_orders': total_orders, 'total_customers': total_customers, 'total_revenue': total_revenue}
+    return { 'total_orders': total_orders, 'total_customers': total_customers,
+    'total_revenue': total_revenue}
 
 def generate_product_popularity_report():
     '''
@@ -120,9 +121,11 @@ def generate_product_popularity_report():
         else str(report_product_dict['customer_count']).ljust(11))
 
         ## Revenue
-        product_row += ((locale.currency(report_product_dict['revenue'], grouping = True)[:11] + '... ')
+        product_row += ((locale.currency(report_product_dict['revenue'],
+        grouping = True)[:11] + '... ')
         if len(str(report_product_dict['revenue'])) > 14
-        else locale.currency(report_product_dict['revenue'], grouping = True).ljust(15))
+        else locale.currency(report_product_dict['revenue'],
+        grouping = True).ljust(15))
 
         ## Appends new product row to output
         output += (' ' + product_row + '\n')
@@ -143,7 +146,8 @@ def generate_product_popularity_report():
     else str(total_customers).ljust(11))
 
     ## Revenue
-    totals_row += ((locale.currency(total_revenue, grouping = True)[:11] + '... ')
+    totals_row += ((locale.currency(total_revenue,
+    grouping = True)[:11] + '... ')
     if len(str(total_revenue)) > 14
     else locale.currency(total_revenue, grouping = True).ljust(15))
 
