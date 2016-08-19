@@ -7,30 +7,20 @@ def generate_product_report():
     '''
 
     ## Declare main report dictionary...
-    ## and get stored line items from database
+    ## and get report data from bangazon.db
     report = dict()
-    stored_order_line_items = bangazon.get_all_order_line_items()
+    report_data = bangazon.generate_report_data()
 
     ## Iterate through list of stored_line_items tuples
-    for line_item in stored_order_line_items:
+    for product in report_data:
 
-        ## Initialize variables for order and product ids
-        order_id = line_item[1]
-        product_id = line_item[2]
-
-        ## Get order data for current product...
-        ## and declare variable for paid in full status
-        order_tuple = bangazon.get_order_per_order_id(order_id)
-        order_paid_in_full = order_tuple[3]
+        product_name = product[0]
+        product_price = product[1]
+        product_paid = product[2]
+        product_customer_id = product[3]
 
         ## Check that order has been paid for
-        if order_paid_in_full == 1:
-
-            ## Get product data for current product...
-            ## and initialize variables for product's name and price
-            product_tuple = bangazon.get_product_per_product_id(product_id)
-            product_name = product_tuple[1]
-            product_price = int(product_tuple[2])
+        if product_paid == 1:
 
             ## Check for existing product entry in report dictionary...
             ## and set report variables to current values
@@ -48,7 +38,7 @@ def generate_product_report():
             ## Increment report variable values
             order_count += 1
             revenue += product_price
-            customer_id_set.add(order_tuple[2])
+            customer_id_set.add(product_customer_id)
 
             ## Update report products entry in report dictionary
             report.update({product_name: {'order_count': order_count,

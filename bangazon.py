@@ -139,3 +139,13 @@ def finalize_order(payment_option_id, order_id):
                   WHERE order_id = ?""",
                   (payment_option_id, order_id))
         conn.commit()
+
+def generate_report_data():
+    with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
+        c.execute('''SELECT p.name, p.price, o.paid_in_full, o.customer_id
+                  FROM OrderLineItem oli
+                  INNER JOIN Orders o ON o.order_id = oli.order_id
+                  INNER JOIN Product p ON oli.product_id = p.product_id
+                  ''')
+        return c.fetchall()
