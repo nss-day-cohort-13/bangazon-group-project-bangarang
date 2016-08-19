@@ -7,42 +7,44 @@ def generate_product_report():
     stored_order_line_items = bangazon.get_all_order_line_items()
 
     for line_item in stored_order_line_items:
+
         product_tuple = bangazon.get_product_per_product_id(line_item[2])
         product_name = product_tuple[1]
+
         if dict.__contains__(report, product_name):
-            product_id = line_item[2]
-            ## Declare variables for pre-existing...
-            ## order count, customer id set and revenue
             order_count = report[product_name]['order_count']
             revenue = report[product_name]['revenue']
             customer_id_set = report[product_name]['customer_id_set']
 
-        ## Initialize order count and customer id set...
-        # for new report dictionary keys
         else:
             order_count = 0
             revenue = 0
             customer_id_set = set()
 
         order_count += 1
-
         revenue += int(product_tuple[2])
         customer_id_set.add(bangazon.get_order_per_order_id(line_item[1])[2])
+
         report.update({product_name: {'order_count': order_count,
         'revenue': revenue, 'customer_id_set': customer_id_set,
         'customer_count': len(customer_id_set)}})
-    print(report)
+
     return report
 
 def generate_order_totals_dictionary(report):
+
     total_orders = 0
     total_customers = 0
     total_revenue = 0
+
     for product_name in report:
+
         report_product_dictionary = report[product_name]
+
         total_orders += report_product_dictionary['order_count']
         total_customers += report_product_dictionary['customer_count']
         total_revenue += report_product_dictionary['revenue']
+
     return { 'total_orders': total_orders, 'total_customers': total_customers, 'total_revenue': total_revenue}
 
 def generate_product_popularity_report():
