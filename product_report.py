@@ -15,7 +15,7 @@ def generate_product_report():
     for product in report_data:
 
         product_name = product[0]
-        product_price = product[1]
+        product_price = int(product[1])
         product_paid = product[2]
         product_customer_id = product[3]
 
