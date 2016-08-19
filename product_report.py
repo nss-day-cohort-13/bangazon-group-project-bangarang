@@ -2,9 +2,9 @@ import locale
 import bangazon
 
 def generate_product_report():
-'''
-Generate report dictionary from stored order line items
-'''
+    '''
+    Generate report dictionary from stored order line items
+    '''
 
     ## Declare main report dictionary...
     ## and get stored line items from database
