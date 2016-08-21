@@ -8,14 +8,6 @@ def get_all_products():
         conn.commit()
         return c.fetchall()
 
-# get product data for a given product id
-def get_product_per_product_id(product_id):
-    with sqlite3.connect('bangazon.db') as conn:
-        c = conn.cursor()
-        c.execute('SELECT * FROM Product WHERE product_id=?',(product_id,))
-        conn.commit()
-        return c.fetchone()
-
 # select customers from database
 def get_all_customers():
     with sqlite3.connect('bangazon.db') as conn:
@@ -121,14 +113,6 @@ def get_product_names_per_order_for_current_user(customer_id):
                   GROUP BY o.order_id""", (customer_id,))
         conn.commit()
         return c.fetchall()
-
-# Gets order data given an order id
-def get_order_per_order_id(order_id):
-    with sqlite3.connect('bangazon.db') as conn:
-        c = conn.cursor()
-        c.execute('SELECT * FROM Orders WHERE order_id=?', (order_id,))
-        conn.commit()
-        return c.fetchone()
 
 # complete order
 def finalize_order(payment_option_id, order_id):
